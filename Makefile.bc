@@ -1,0 +1,53 @@
+# Define some useful Macros:
+CC        = bcc32     # These are defaults from the "BUILTINS.MAK" file.
+LINK      = ilink32
+LIB       = tlib
+TOPDIR    = ../../
+# Uncomment the following two lines for debug builds...
+#CXXFLAGS  = -P -5 -a1 -Od -w-inl
+#DEFINES   = -DDEBUG -D_WINDOWS -DWIN32 -D__BORLANDC__=0x550
+# Uncomment the following two lines for release builds...
+CXXFLAGS  = -P -5 -a1 -O1 -Ov -w-inl
+DEFINES   = -DNDEBUG -D_WINDOWS -DWIN32 -D__BORLANDC__=0x550 
+
+.SUFFIXES: .cpp .c
+LINKFLAGS =    # An empty list, there are no extra linker options.
+DELETE = del   # On a unix system change this to rm.
+COPY = copy    # on a Unix system change this to cp.
+
+# The executable to build:
+TARGET = options.lib
+
+# The list of object files to be built and then linked into $(TARGET):
+OBJS = Option.obj OptionCont.obj OptionsIO.obj OptionsLoader.obj OptionsParser.obj
+
+# The list of extra libraries needed to compile the source:
+LIBS = 
+
+# Paths of extra headers and libraries:
+INCDIRS = -IC:\MehrProgramme\Borland\BCC55\Include -I$(TOPDIR) -I$(TOPDIR)foreign/oldgd
+LIB_PATH = #-L$(XERCESROOT)\lib
+
+# Some make directives (similar to running make with cmd line args)
+# (Note ".autodepend" only works for Borland make.):
+.SILENT       # just like adding an @ before every command.
+.autodepend   # automatically determine header file dependencies.
+
+# Now list the targets, the first one listed is the default:
+
+all: $(TARGET)
+	echo.             # For DOS "echo." prints a blank line.
+	echo "$(TARGET)" is up to date!
+	echo.
+
+clean:
+	-$(DELETE) *.obj  # If the files don't exist this produces an error.
+	-$(DELETE) *.tds  # The leading "-" says ignore any error & continue.
+
+# Rule to build object files from sources:
+.cpp.obj:
+    $(CC) -c $(INCDIRS) $(CXXFLAGS) $(DEFINES) $<
+
+# Make the library
+$(TARGET): $(OBJS)
+	$(LIB) "$(TARGET)"
