@@ -64,9 +64,8 @@ using namespace std;
 bool
 OptionsIO::parseAndLoad(OptionCont &into, int argc, char **argv,
                         const std::string &configurationName,
-                        bool continueOnError, bool acceptUnknown) {
-    bool ok = true;
-    ok = OptionsParser::parse(into, argc, argv);
+                        bool , bool ) {
+    bool ok = OptionsParser::parse(into, argc, argv);
     if(ok) into.remarkUnset();
     if(ok) ok = load(into, configurationName);
     if(ok) into.remarkUnset();
@@ -109,6 +108,9 @@ OptionsIO::load(OptionCont &into, const std::string &configurationName) {
         return false;
     }
     return !handler.errorOccured();
+#else
+    // consume "into"
+    into.contains("foo");
 #endif // USE_XML_OPTIONS
 #ifndef USE_XML_OPTIONS
     return true;

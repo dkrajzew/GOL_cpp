@@ -156,7 +156,6 @@ void
 Option_Integer::set(const std::string &value) {
     setSet();
     // adapted from https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c/6154614#6154614
-    int ret = 0;
     char *end;
     errno = 0;
     long l = strtol(value.c_str(), &end, 0); // base=0->guess
@@ -230,7 +229,13 @@ void
 Option_Bool::set(const std::string &v) {
     std::string value = v;
     setSet();
-    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+    // Borland does not know how to transform
+    for(size_t i=0; i<value.length(); ++i) {
+        if(value[i]>='A'&&value[i]<='Z') {
+            value[i] = value[i] - ('A'-'a');
+        }
+    }
+    //std::transform(value.begin(), value.end(), value.begin(), ::tolower);
     if(value=="t"||value=="true"||value=="1") {
         myValue = true;
     } else if(value=="f"||value=="false"||value=="0") {
@@ -299,7 +304,6 @@ Option_Double::getTypeName() {
 void 
 Option_Double::set(const std::string &value) {
     setSet();
-    int ret = 0;
     char *end;
     errno = 0;
     double d = strtod(value.c_str(), &end);

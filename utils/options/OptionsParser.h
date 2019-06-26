@@ -3,7 +3,7 @@
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionsLoader
+   module:       OptionsParser
    purpose:      Static helpers for parsing options from command line
    begin:        03.03.2004
    copyright:    (C) Daniel Krajzewicz
@@ -63,6 +63,7 @@ public:
 	 * @param[in] argv The arguments given on the command line
 	 * @param[in] continueOnError Continues even if an error occures while parsing
 	 * @param[in] acceptUnknown Unknown options do not throw an exception
+     * @todo acceptUnknown is not used
 	 */
     static bool parse(OptionCont &into, int argc, char **argv,
 		bool continueOnError=true, bool acceptUnknown=false);

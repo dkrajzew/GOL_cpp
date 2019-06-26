@@ -1,7 +1,7 @@
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionsLoader
+   module:       OptionsParser
    purpose:      Static helpers for parsing options from command line
    begin:        21.02.2004
    copyright:    (C) Daniel Krajzewicz
@@ -56,7 +56,7 @@ using namespace std;
  * method definitions
  * ======================================================================= */
 bool
-OptionsParser::parse(OptionCont &into, int argc, char **argv, bool continueOnError, bool acceptUnknown) {
+OptionsParser::parse(OptionCont &into, int argc, char **argv, bool continueOnError, bool ) {
     bool ok = true;
     for(int pos=1; pos<argc;) {
         // try to parse a token combination

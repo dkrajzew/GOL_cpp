@@ -66,6 +66,8 @@ public:
   	 * @param[in] configurationName The path to the configuration to load (XML)
 	 * @param[in] continueOnError Continues even if an error occures while parsing
   	 * @param[in] acceptUnknown Unknown options do not throw an exception
+     * @todo continueOnError is not used
+     * @todo acceptUnknown is not used
      */
     static bool parseAndLoad(OptionCont &into, int argc, char **argv,
 		const std::string &configurationName, bool continueOnError=false,
