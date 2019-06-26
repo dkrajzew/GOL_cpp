@@ -1,0 +1,85 @@
+# Define some useful Macros:
+CC = bcc32     # These are defaults from the "BUILTINS.MAK" file.
+LINK = bcc32
+TOPDIR    = .
+# Uncomment the following two lines for debug builds...
+#CXXFLAGS  = -P -5 -a1 -Od -w-inl
+#DEFINES   = -DDEBUG -D_WINDOWS -DWIN32 -D__BORLANDC__=0x550
+# Uncomment the following two lines for release builds...
+CXXFLAGS  = -P -5 -a1 -O1 -Ov -w-inl 
+DEFINES   = -DNDEBUG -D_WINDOWS -DWIN32 -D__BORLANDC__=0x550
+SHAREWARE_DEFINES   = $(DEFINES) -DSHAREWARE 
+
+.SUFFIXES: .cpp .c
+LINKFLAGS = 
+DELETE = del   # On a unix system change this to rm.
+COPY = copy    # on a Unix system change this to cp.
+
+# The executable to build:
+TARGET_TESTER = tester.exe 
+TARGET_EXAMPLE = example.exe 
+
+# The list of object files to be built and then linked into $(TARGET_TESTER) / $(TARGET_EXAMPLE):
+OBJS_TESTER = tester.obj
+OBJS_EXAMPLE = example.obj
+
+SUBDIRS = utils 
+
+# The list of extra libraries needed to compile the source:
+LIBS =  utils\options\OptionCont.obj utils\options\OptionsIO.obj utils\options\Option.obj utils\options\OptionsParser.obj 
+
+# Paths of extra headers and libraries:
+INCDIRS = -IC:\MehrProgramme\Borland\BCC55\Include -I$(TOPDIR)
+LIB_PATH = -LC:\MehrProgramme\Borland\BCC55\Lib
+
+# Location of executable (can also define locations for .DLL, .HLP, ...)
+INSTALL_DIR = .
+
+# Some make directives (similar to running make with cmd line args)
+# (Note ".autodepend" only works for Borland make.):
+.SILENT       # just like adding an @ before every command.
+.autodepend   # automatically determine header file dependencies.
+
+# Now list the targets, the first one listed is the default:
+
+all: $(TARGET_TESTER) $(TARGET_EXAMPLE)
+	echo.             # For DOS "echo." prints a blank line.
+	echo all is up to date!
+	echo.
+
+
+$(TARGET_TESTER): $(OBJS_TESTER) $(SUBDIRS)       # The .exe depends on all the object files.
+	# Build the target ($@) from the .OBJ files:
+	$(LINK) $(LINKFLAGS) $(LIB_PATH) $(OBJS_TESTER) $(LIBS)
+
+$(TARGET_EXAMPLE): $(OBJS_EXAMPLE) $(SUBDIRS)       # The .exe depends on all the object files.
+	# Build the target ($@) from the .OBJ files:
+	$(LINK) $(LINKFLAGS) $(LIB_PATH) $(OBJS_EXAMPLE) $(LIBS)
+
+clean:
+	-$(DELETE) *.obj  # If the files don't exist this produces an error.
+	-$(DELETE) *.tds  # The leading "-" says ignore any error & continue.
+
+install: all
+	$(COPY) $(TARGET_TESTER) $(INSTALL_DIR)
+	$(COPY) $(TARGET_EXAMPLE) $(INSTALL_DIR)
+
+help:
+	echo.
+	echo "make" builds $(TARGET_TESTER).
+	echo "make install" builds $(TARGET_TESTER) and puts it in $(INSTALL_DIR).
+	echo "make clean" removes all object (and precompiled hearder) files.
+	echo.
+
+# Rule to build object files from sources:
+tester.obj:
+        $(CC) -c $(INCDIRS) $(CXXFLAGS) $(DEFINES) -otester.obj tester.cpp
+example.obj:
+        $(CC) -c $(INCDIRS) $(CXXFLAGS) $(SHAREWARE_DEFINES) -oexample.obj example.cpp
+
+.PHONY: subdirs $(SUBDIRS)
+subdirs: $(SUBDIRS)
+$(SUBDIRS):
+    cd $@
+    $(MAKE) -fMakefile.bc
+    cd ..

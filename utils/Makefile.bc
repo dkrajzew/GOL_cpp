@@ -1,0 +1,7 @@
+SUBDIRS = options
+.PHONY: subdirs $(SUBDIRS)
+subdirs: $(SUBDIRS)
+$(SUBDIRS):
+    cd $@
+    $(MAKE) -fMakefile.bc
+    cd ..
