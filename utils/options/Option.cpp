@@ -164,7 +164,7 @@ Option_Integer::set(const std::string &value) {
         throw std::runtime_error("overflow");
     }
     if ((errno == ERANGE && l == LONG_MIN) || l < INT_MIN) {
-        throw std::runtime_error("undeflow");
+        throw std::runtime_error("underflow");
     }
     if (value.c_str() == '\0' || *end != '\0') {
         throw std::runtime_error("inconvertible");
