@@ -113,7 +113,6 @@ OptionsIO::load(OptionCont &into, const std::string &configurationName) {
 #ifndef USE_XML_OPTIONS
     return true;
 #endif // USE_XML_OPTIONS
-
 }
 
 
