@@ -132,32 +132,10 @@ char *help[] = {
  * ======================================================================= */
 bool
 getOptions(int argc, char *argv[]) {
-    // files
-    myOptions.add("input", 'i', new Option_FileName()); // !!! filename
-    myOptions.add("recurse", 'r', new Option_Bool(false));
-    myOptions.add("fromformat", 'f', new Option_String(""));
-    myOptions.add("output", 'o', new Option_FileName()); // !!! filename
-    myOptions.add("toformat", 't', new Option_String(""));
-    // css
-    myOptions.add("css.name", new Option_String(".pal_%n_%i"));
-    myOptions.add("css.attribute", new Option_String("background-color"));
-    // JavaScript
-    myOptions.add("js.name", new Option_String("%f"));
-    myOptions.add("js.type", new Option_String("hex"));
-    // images
-    myOptions.add("cell-width", 'w', new Option_Integer(1));
-    myOptions.add("cell-height", 'h', new Option_Integer(1));
-    myOptions.add("columns", new Option_Integer());
-    // processing
-    myOptions.add("max-colors", 'm', new Option_Integer());
-    myOptions.add("name", 'n', new Option_String());
-    //
-    myOptions.add("print-files", new Option_Bool(false));
-    myOptions.add("print-files.prefix", new Option_String("#"));
-    myOptions.add("print-files.divider", new Option_String(";"));
-    myOptions.add("verbose", 'v', new Option_Bool(false));
-    myOptions.add("print-set-options", new Option_Bool(false));
-    myOptions.add("print-summary", new Option_Bool(false));
+    // function
+    myOptions.add("name", 'n', new Option_String("World"));
+    myOptions.add("greet", 'g', new Option_String("Hello"));
+    myOptions.add("repeat", 'r', new Option_Integer());
     //
     myOptions.add("version", new Option_Bool(false));
     myOptions.add("help", '?', new Option_Bool(false));
@@ -183,40 +161,35 @@ int
 main(int argc, char *argv[]) {
     ReturnCodes ret = STAT_OK;
     // print how to get the help screen
-    if(argc==1) {
-        printAppVersion();
-        printCopyrightAndContact();
-        cerr << "Error: No options given." << endl;
-        cerr << " Use --help for further information." << endl;
-        ret = STAT_MISSING_OPTION;
-    } else {
-        try {
-            // parse options
-            if(!getOptions(argc, argv)) {
-                throw std::runtime_error("Please check your options.");
-            }
-            // check for additional (meta) options
-            if(myOptions.getBool("help")) {
-                // print the help screen
-                printAppVersion();
-                printCopyrightAndContact();
-                //HelpPrinter::print(help);
-            } else if(myOptions.getBool("version")) {
-                // print version
-                printAppVersion();
-            } else {
-                // run
-                if(myOptions.getBool("print-set-options")) {
-                    cout << "Currently set options:" << endl;
-                    cout << myOptions << endl;
-                    cout << "------------------------------------------------------------------" << endl;
-                }
-                // do something
-            }
-        } catch(std::runtime_error &e) {
-            cerr << e.what() << endl;
-            ret = STAT_READ_COMMENT;
+    try {
+        // parse options
+        if(!getOptions(argc, argv)) {
+            throw std::runtime_error("Please check your options.");
         }
+        // check for additional (meta) options
+        if(myOptions.getBool("help")) {
+            // print the help screen
+            printAppVersion();
+            printCopyrightAndContact();
+            //HelpPrinter::print(help);
+        } else if(myOptions.getBool("version")) {
+            // print version
+            printAppVersion();
+        } else {
+            // do something
+            std::string name = myOptions.getString("name");
+            std::string greet = myOptions.getString("greet");
+            int number = 1;
+            if(myOptions.isSet("repeat")) {
+                number = myOptions.getInteger("repeat");
+            }
+            for (int i=0; i<number; ++i) {
+                std::cout << greet << " " << name << "!" << std::endl;
+            }
+        }
+    } catch(std::runtime_error &e) {
+        cerr << e.what() << endl;
+        ret = STAT_READ_COMMENT;
     }
     if(ret!=STAT_OK) {
         cerr << "Quitting (on error)." << endl;

@@ -1,6 +1,7 @@
 # Define some useful Macros:
 CC = bcc32     # These are defaults from the "BUILTINS.MAK" file.
 LINK = bcc32
+COPY = copy
 TOPDIR    = .
 # Uncomment the following two lines for debug builds...
 #CXXFLAGS  = -P -5 -a1 -Od -w-inl
@@ -51,10 +52,12 @@ all: $(TARGET_TESTER) $(TARGET_EXAMPLE)
 $(TARGET_TESTER): $(OBJS_TESTER) $(SUBDIRS)       # The .exe depends on all the object files.
 	# Build the target ($@) from the .OBJ files:
 	$(LINK) $(LINKFLAGS) $(LIB_PATH) $(OBJS_TESTER) $(LIBS)
+    $(COPY) tester.exe bin\tester.exe
 
 $(TARGET_EXAMPLE): $(OBJS_EXAMPLE) $(SUBDIRS)       # The .exe depends on all the object files.
 	# Build the target ($@) from the .OBJ files:
 	$(LINK) $(LINKFLAGS) $(LIB_PATH) $(OBJS_EXAMPLE) $(LIBS)
+    $(COPY) example.exe bin\example.exe
 
 clean:
 	-$(DELETE) *.obj  # If the files don't exist this produces an error.
