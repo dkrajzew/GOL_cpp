@@ -2,3 +2,8 @@ options_example 1.0.0
  (c) Daniel Krajzewicz
   http://www.krajzewicz.de/
 
+   -n, --name      Defines how to call the user.
+   -g, --greet     Defines how to greet.
+   -r, --repeat    Sets an optional number of repetitions.
+   --version       Prints the version.
+   -?, --help      Prints this help screen.
