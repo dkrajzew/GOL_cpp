@@ -107,6 +107,18 @@ Option::setSet() {
 }
 
 
+void
+Option::setDescription(const std::string &desc) {
+    myDescription = desc;
+}
+
+
+const std::string &
+Option::getDescription() const {
+    return myDescription;
+}
+
+
 bool
 Option::isFileName() const {
     return false;

@@ -30,6 +30,7 @@
 #include <string>
 #include <cassert>
 #include <fstream>
+#include <sstream>
 
 #include <utils/options/OptionCont.h>
 #include <utils/options/Option.h>
@@ -71,99 +72,12 @@ OptionCont myOptions;
  * ======================================================================= */
 enum ReturnCodes {
     STAT_OK = 0,
-    STAT_MISSING_OPTION = 1,
-    STAT_FALSE_OPTION = 2,
-    STAT_READ_COMMENT = 3
+    STAT_MISSING_DEFINITION = 1,
+    STAT_MISSING_OPTION = 2,
+    STAT_FALSE_OPTION = 3,
+    STAT_READ_COMMENT = 4
 };
 
-
-
-/* =========================================================================
- * help text
- * ======================================================================= */
-char *help[] = {
-    "Usage: options_tester [option]+",
-    " ",
-    "Options:",
-    " File Options:",
-    "   -i, --input <PATH>[;<PATH>]*    The files to read; Paths are accepted, too",
-    "   -f, --fromformat <FORMAT>       Which input format is assumed",
-    "   -o, --output <PATH>             The name of the output file",
-    "   -t, --toformat <FORMAT>         Which format shall be used for output",
-    "   -r, --recurse                   Enable recursion into subfolders",
-    " Image Export Options:",
-    "   -w, --cell-width <PIXEL>        The width of a cell in the image (default:1)",
-    "   -h, --cell-height <PIXEL>       The height of a cell in the image (default:1)",
-    "   --columns <INTEGER>             The number of columns; a flat line if not given",
-    " CSS Export Options:",
-    "   --css.name <FORMAT_STRING>      A format string that defines how the names of",
-    "                                    the css-entries are generated",
-    "   --css.attribute <NAME>          The name of the attribute to assign the color to",
-    " JavaScript Export Options:",
-    "   --js.name <FORMAT_STRING>       A format string that defines how the variable name",
-    "   --js.type <NAME>                The wanted representation type ['hex', 'triplet']",
-    " Operators:",
-    "   -m, --max-colors <INTEGER>      Limits the palette to this size",
-    "   -n, --name <STRING>             Names the palette",
-    " Report Options:",
-    "   -v, --verbose                   Enable verbose reporting",
-    "   --print-files                   Prints the files that are processed",
-    "   --print-files.prefix <STRING>   Defines the prefix to be used",
-    "   --print-files.divider <STRING>  Defines the divider between files",
-    "   --print-set-options             Prints option values before processing",
-    "   --print-summary                 Prints a summary after processing.",
-    " Help and Version Options:",
-    "   -?, --help                      Prints this screen",
-    "   --version                       Prints the version",
-    "",
-    "Format String Placeholders:",
-    "   %f: input file name (without extension)",
-    "   %n: palette name (from the --name option, the information within the file, or",
-    "        the filename (without the extension)",
-    "   %i: current entry's index",
-    "   ",
-    0
-};
-
-
-
-/* =========================================================================
- * method definitions
- * ======================================================================= */
-bool
-getOptions(int argc, char *argv[]) {
-    // files
-    myOptions.add("input", 'i', new Option_FileName()); // !!! filename
-    myOptions.add("recurse", 'r', new Option_Bool(false));
-    myOptions.add("fromformat", 'f', new Option_String(""));
-    myOptions.add("output", 'o', new Option_FileName()); // !!! filename
-    myOptions.add("toformat", 't', new Option_String(""));
-    // css
-    myOptions.add("css.name", new Option_String(".pal_%n_%i"));
-    myOptions.add("css.attribute", new Option_String("background-color"));
-    // JavaScript
-    myOptions.add("js.name", new Option_String("%f"));
-    myOptions.add("js.type", new Option_String("hex"));
-    // images
-    myOptions.add("cell-width", 'w', new Option_Integer(1));
-    myOptions.add("cell-height", 'h', new Option_Integer(1));
-    myOptions.add("columns", new Option_Integer());
-    // processing
-    myOptions.add("max-colors", 'm', new Option_Integer());
-    myOptions.add("name", 'n', new Option_String());
-    //
-    myOptions.add("print-files", new Option_Bool(false));
-    myOptions.add("print-files.prefix", new Option_String("#"));
-    myOptions.add("print-files.divider", new Option_String(";"));
-    myOptions.add("verbose", 'v', new Option_Bool(false));
-    myOptions.add("print-set-options", new Option_Bool(false));
-    myOptions.add("print-summary", new Option_Bool(false));
-    //
-    myOptions.add("version", new Option_Bool(false));
-    myOptions.add("help", '?', new Option_Bool(false));
-    // parse
-    return OptionsIO::parseAndLoad(myOptions, argc, argv, "");
-}
 
 
 void
@@ -179,42 +93,122 @@ printCopyrightAndContact() {
 }
 
 
+ReturnCodes
+loadDefinition() {
+    ifstream defs("options.txt");
+    if(!defs.good()) {
+        std::cerr << "Could not open the definitions file ('options.txt')" << std::endl;
+        return STAT_MISSING_DEFINITION;
+    }
+    while(defs.good()) {
+        string line;
+        std::getline(defs, line);
+        if(line.find(';')==string::npos) {
+            // ok, it's a subsection
+        } else {
+            // ok, it's an option
+            // ... parse it
+            std::vector<std::string> synonymes;
+            char abbr = '!';
+            std::string type, description, defaultValue;
+            istringstream f(line);
+            string s;    
+            while (getline(f, s, ';')) {
+                if(type.length()==0) {
+                    type = s;
+                    continue;
+                }
+                if (s.length()==1) {
+                    abbr = s[0];
+                } else if(s[0]=='!') {
+                    description = s.substr(1);
+                }  else if(s[0]=='+') {
+                    defaultValue = s.substr(1);
+                } else {
+                    synonymes.push_back(s);
+                }
+            }
+            // ... build the option, first
+            Option *option = 0;
+            if(type=="INT") {
+                if(defaultValue.length()==0) {
+                    option = new Option_Integer();
+                } else {
+                    int v = atoi(defaultValue.c_str());
+                    option = new Option_Integer(v);
+                }
+            } else if(type=="DOUBLE") {
+                if(defaultValue.length()==0) {
+                    option = new Option_Double();
+                } else {
+                    double v = atof(defaultValue.c_str());
+                    option = new Option_Double(v);
+                }
+            } else if(type=="BOOL") {
+                if(defaultValue.length()==0) {
+                    option = new Option_Bool();
+                } else {
+                    option = new Option_Bool(defaultValue[0]=='t');
+                }
+            } else if(type=="STRING") {
+                if(defaultValue.length()==0) {
+                    option = new Option_String();
+                } else {
+                    option = new Option_String(defaultValue);
+                }
+            } else if(type=="FILE") {
+                if(defaultValue.length()==0) {
+                    option = new Option_FileName();
+                } else {
+                    int v = atoi(defaultValue.c_str());
+                    option = new Option_FileName(defaultValue);
+                }
+            }
+            // ... add it to the container
+            std::string firstName = synonymes.front();
+            synonymes.erase(synonymes.begin());
+            if(abbr!='!') {
+                myOptions.add(firstName, abbr, option);
+            } else {
+                myOptions.add(firstName, option);
+            }
+            while(!synonymes.empty()) {
+                myOptions.addSynonyme(firstName, synonymes.front());
+                synonymes.erase(synonymes.begin());
+            }
+            // ... add description if given
+            if(description.length()!=0) {
+                myOptions.setDescription(firstName, description);
+            }
+        }
+    }
+    // add default tester options
+    myOptions.add("tester.help", new Option_Bool(false));
+    return STAT_OK;
+}
+
 int
 main(int argc, char *argv[]) {
     ReturnCodes ret = STAT_OK;
-    // print how to get the help screen
-    if(argc==1) {
-        printAppVersion();
-        printCopyrightAndContact();
-        cerr << "Error: No options given." << endl;
-        cerr << " Use --help for further information." << endl;
-        ret = STAT_MISSING_OPTION;
-    } else {
+    // load the definition
+    ret = loadDefinition();
+    // parse options
+    if(ret==STAT_OK) {
         try {
-            // parse options
-            if(!getOptions(argc, argv)) {
-                throw std::runtime_error("Please check your options.");
+            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, "")) {
+                ret = STAT_READ_COMMENT;
             }
-            // check for additional (meta) options
-            if(myOptions.getBool("help")) {
-                // print the help screen
-                printAppVersion();
-                printCopyrightAndContact();
-                //HelpPrinter::print(help);
-            } else if(myOptions.getBool("version")) {
-                // print version
-                printAppVersion();
+            if(myOptions.contains("tester.help")&&myOptions.getBool("tester.help")) {
+                myOptions.printHelp(std::cout);
+            }
+            std::cout << "-------------------------------------------------------------------------------" << std::endl;
+            std::cout << myOptions << std::endl;
+        } catch(std::exception &e) {
+            if(dynamic_cast<std::runtime_error*>(&e)!=0) {
+                std::cerr << "Got std::runtime_error: " << dynamic_cast<std::runtime_error*>(&e)->what() << std::endl;
             } else {
-                // run
-                if(myOptions.getBool("print-set-options")) {
-                    cout << "Currently set options:" << endl;
-                    cout << myOptions << endl;
-                    cout << "------------------------------------------------------------------" << endl;
-                }
-                // do something
+                std::cerr << "Got std::exception" << std::endl;
             }
-        } catch(std::runtime_error &e) {
-            cerr << e.what() << endl;
             ret = STAT_READ_COMMENT;
         }
     }

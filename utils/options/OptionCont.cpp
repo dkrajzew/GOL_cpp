@@ -74,14 +74,17 @@ OptionCont::add(char abbr, Option *option) {
 
 void
 OptionCont::add(const std::string &name, Option *option) {
+    // check whether the name is already used
     ContType::iterator i = myOptionsMap.find(name);
     if(i!=myOptionsMap.end()) {
         throw std::exception();// ("An option with the name '" + name + "' already exists.");
     }
+    // check whether a synonyme already exists, if not, add the option to option's array
     AddressContType::iterator j = find(myOptions.begin(), myOptions.end(), option);
     if(j==myOptions.end()) {
         myOptions.push_back(option);
     }
+    // add the option to the name-to-option map
     myOptionsMap.insert(ContType::value_type(name, option));
 }
 
@@ -94,7 +97,7 @@ OptionCont::add(const std::string &name, char abbr, Option *option) {
 
 
 void
-OptionCont::synonymes(const std::string &name1, const std::string &name2) {
+OptionCont::addSynonyme(const std::string &name1, const std::string &name2) {
     Option *o1 = getOptionSecure(name1);
     Option *o2 = getOptionSecure(name2);
     if(o1==0&&o2==0) {
@@ -231,9 +234,14 @@ OptionCont::contains(const string &name) const {
 std::vector<std::string>
 OptionCont::getSynonymes(const std::string &name) const {
     Option *o = getOption(name);
+    return getSynonymes(o);
+}
+
+std::vector<std::string>
+OptionCont::getSynonymes(const Option* const option) const {
     vector<string> ret;
     for(ContType::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
-        if((*i).second==o&&(*i).first!=name) {
+        if((*i).second==option) {
             ret.push_back((*i).first);
         }
     }
@@ -258,6 +266,57 @@ OptionCont::convert(char abbr) {
     return s;
 }
 
+
+void
+OptionCont::setDescription(const std::string &name, const std::string &desc) {
+    Option *o = getOption(name);
+    o->setDescription(desc);
+}
+
+
+void
+OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider) const {
+    // compute needed width
+    size_t maxWidth = 0;
+    for(AddressContType::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
+        std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
+        maxWidth = maxWidth<optNames.length() ? optNames.length() : maxWidth;
+    }
+    // build the indent
+    std::string optionIndentSting;
+    for(size_t i=0; i<optionIndent; ++i) {
+        optionIndentSting += " ";
+    }
+    // 
+    compareByLength c;
+    for(AddressContType::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
+        // write the option
+        std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
+        os << optionIndentSting << optNames;
+        size_t owidth = optNames.length();
+        // write the divider
+        // write the description
+        size_t beg = 0;
+        std::string desc = (*i)->getDescription();
+        size_t offset = divider+maxWidth-owidth;
+        while(beg<desc.length()) {
+            for(size_t j=0; j<offset; ++j) {
+                os << " ";
+            }
+            if(80-offset>=desc.length()-beg) {
+                os << desc.substr(beg);
+                beg = desc.length();
+            } else {
+                size_t end = desc.rfind(' ', beg+80-offset);
+                os << desc.substr(beg, end);
+                end = desc.length();
+                os << std::endl;
+            }
+            offset = divider; // could "running description indent"
+        }
+        os << std::endl;
+    }
+}
 
 std::ostream &
 operator<<(std::ostream &os, const OptionCont &oc) {
@@ -289,6 +348,27 @@ operator<<(std::ostream &os, const OptionCont &oc) {
         }
     }
     return os;
+}
+
+std::string 
+OptionCont::getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const {
+    compareByLength c;
+    std::vector<std::string> synonymes = getSynonymes(option);
+    std::sort(synonymes.begin(), synonymes.end(), c);
+    std::ostringstream oss;
+    for(std::vector<std::string>::const_iterator j=synonymes.begin(); j!=synonymes.end(); ++j) {
+        // consider the - / --
+        if((*j).length()==1) {
+            oss << '-';
+        } else {
+            oss << "--";
+        }
+        oss << (*j);
+        if(j!=synonymes.end()-1) {
+            oss << ", ";
+        }
+    }
+    return oss.str();
 }
 
 

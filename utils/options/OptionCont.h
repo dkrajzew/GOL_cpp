@@ -90,7 +90,7 @@ public:
 	 * @param[in] name1 The name the option was already known under
 	 * @param[in] name2 The synonyme to register
 	 */
-    void synonymes(const std::string &name1, const std::string &name2);
+    void addSynonyme(const std::string &name1, const std::string &name2);
 
 
     /** @brief Returns the integer value of the named option
@@ -156,6 +156,13 @@ public:
     std::vector<std::string> getSynonymes(const std::string &name) const;
 
 
+    /** @brief Returns the list of names of the given option
+	 * @param[in] option The option to retrieve her names
+	 * @return List of this option's names
+	 */
+    std::vector<std::string> getSynonymes(const Option* const option) const;
+
+
     /// @brief Remarks all options as unset
     void remarkUnset();
 
@@ -167,12 +174,30 @@ public:
     bool contains(const std::string &name) const;
 
 
+    /** @brief Sets the description for an already added option
+     *
+     * The description is what appears in the help menu
+	 * @param[in] name The name of the option
+	 * @param[in] desc The description of the option
+	 */
+    void setDescription(const std::string &name, const std::string &desc);
+
+
     /** @brief Output operator
-     * @param[out] name The stream to write to
+     * @param[out] os The stream to write to
      * @param[in] oc The output container to write
      * @return The stream to write to
 	 */
     friend std::ostream &operator<<(std::ostream &os, const OptionCont &oc);
+
+
+    /** @brief Prints the help screen
+     *
+     * First, the help header is printed. Then, the method iterates over the
+     *  known options. In the end, the help tail is printed.
+     * @param[out] os The stream to write to
+	 */
+    void printHelp(std::ostream &os, size_t optionIndent=3, size_t divider=4) const;
 
 
 
@@ -197,6 +222,26 @@ private:
 	 * @return The abbreviated name as a string
 	 */
     std::string convert(char abbr);
+
+
+    /** @brief A string-by-length comperator
+     */
+    struct compareByLength {
+        bool operator()(const std::string& first, const std::string& second) {
+            return first.size() < second.size();
+        }
+    };
+
+
+    /** @brief Returns the synomymes of an option as a help-formatted string 
+     *
+     * The synomymes are sorted by length.
+     * @param[in] option The option to get the synonymes help string for
+     * @param[in] optionIndent The indentation of options
+     * @param[in] divider The space between the options and the help string
+     * @return The options as a help-formatted string
+     */
+    std::string getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const;
 
 
 

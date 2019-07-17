@@ -110,6 +110,19 @@ public:
     virtual void set(const std::string &value) = 0;
 
 
+    /** @brief Adds a description (what appears in the help screen) to the option
+     *
+     * @param[in] desc The description to set
+	 */
+    void setDescription(const std::string &desc);
+
+
+    /** @brief Retuns the option's description
+     * @return The option's description
+	 */
+    const std::string &getDescription() const;
+
+
     /** @brief Returns the value (if set) as a string
      *
      * Throws an exception if not set.
@@ -164,6 +177,9 @@ private:
 
     /// @brief Information whether this option's value is the one given optionally at initialisation
     bool myHaveDefaultValue;
+
+    /// @brief The description (what appears in the help screen) of the option
+    std::string myDescription;
 
 
 };

@@ -134,11 +134,16 @@ bool
 getOptions(int argc, char *argv[]) {
     // function
     myOptions.add("name", 'n', new Option_String("World"));
+    myOptions.setDescription("name", "Defines how to call the user.");
     myOptions.add("greet", 'g', new Option_String("Hello"));
+    myOptions.setDescription("greet", "Defines how to greet.");
     myOptions.add("repeat", 'r', new Option_Integer());
+    myOptions.setDescription("repeat", "Sets an optional number of repetitions.");
     //
     myOptions.add("version", new Option_Bool(false));
+    myOptions.setDescription("version", "Prints the version.");
     myOptions.add("help", '?', new Option_Bool(false));
+    myOptions.setDescription("help", "Prints this help screen.");
     // parse
     return OptionsIO::parseAndLoad(myOptions, argc, argv, "");
 }
@@ -171,7 +176,7 @@ main(int argc, char *argv[]) {
             // print the help screen
             printAppVersion();
             printCopyrightAndContact();
-            //HelpPrinter::print(help);
+            myOptions.printHelp(std::cout);
         } else if(myOptions.getBool("version")) {
             // print version
             printAppVersion();
