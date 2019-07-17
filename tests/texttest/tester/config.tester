@@ -1,0 +1,4 @@
+binary:$TESTER_BINARY
+
+copy_test_path:options.txt
+

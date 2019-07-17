@@ -1,0 +1,5 @@
+STRING;n;name;the-name-to-call-the-user;changing-how-to-call-the-user;setting-the-user-name;+World;!Defines how to call the user.
+STRING;g;greet;+Hello;!Defines how to greet.
+INT;r;repeat;!Sets an optional number of repetitions.
+BOOL;version;!Prints the version.
+BOOL;?;help;!Prints this help screen.
