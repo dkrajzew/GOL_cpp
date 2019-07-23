@@ -79,59 +79,11 @@ enum ReturnCodes {
 
 
 /* =========================================================================
- * help text
- * ======================================================================= */
-char *help[] = {
-    "Usage: options_example [option]+",
-    " ",
-    "Options:",
-    " File Options:",
-    "   -i, --input <PATH>[;<PATH>]*    The files to read; Paths are accepted, too",
-    "   -f, --fromformat <FORMAT>       Which input format is assumed",
-    "   -o, --output <PATH>             The name of the output file",
-    "   -t, --toformat <FORMAT>         Which format shall be used for output",
-    "   -r, --recurse                   Enable recursion into subfolders",
-    " Image Export Options:",
-    "   -w, --cell-width <PIXEL>        The width of a cell in the image (default:1)",
-    "   -h, --cell-height <PIXEL>       The height of a cell in the image (default:1)",
-    "   --columns <INTEGER>             The number of columns; a flat line if not given",
-    " CSS Export Options:",
-    "   --css.name <FORMAT_STRING>      A format string that defines how the names of",
-    "                                    the css-entries are generated",
-    "   --css.attribute <NAME>          The name of the attribute to assign the color to",
-    " JavaScript Export Options:",
-    "   --js.name <FORMAT_STRING>       A format string that defines how the variable name",
-    "   --js.type <NAME>                The wanted representation type ['hex', 'triplet']",
-    " Operators:",
-    "   -m, --max-colors <INTEGER>      Limits the palette to this size",
-    "   -n, --name <STRING>             Names the palette",
-    " Report Options:",
-    "   -v, --verbose                   Enable verbose reporting",
-    "   --print-files                   Prints the files that are processed",
-    "   --print-files.prefix <STRING>   Defines the prefix to be used",
-    "   --print-files.divider <STRING>  Defines the divider between files",
-    "   --print-set-options             Prints option values before processing",
-    "   --print-summary                 Prints a summary after processing.",
-    " Help and Version Options:",
-    "   -?, --help                      Prints this screen",
-    "   --version                       Prints the version",
-    "",
-    "Format String Placeholders:",
-    "   %f: input file name (without extension)",
-    "   %n: palette name (from the --name option, the information within the file, or",
-    "        the filename (without the extension)",
-    "   %i: current entry's index",
-    "   ",
-    0
-};
-
-
-
-/* =========================================================================
  * method definitions
  * ======================================================================= */
 bool
 getOptions(int argc, char *argv[]) {
+    myOptions.setHelpHeadAndTail("Usage: options_example [option]+\n\nOptions:\n","");
     // function
     myOptions.add("name", 'n', new Option_String("World"));
     myOptions.setDescription("name", "Defines how to call the user.");

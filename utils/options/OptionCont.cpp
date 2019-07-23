@@ -60,12 +60,16 @@ OptionCont::OptionCont() {
 
 
 OptionCont::~OptionCont() {
-    for(AddressContType::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
+    for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
         delete *i;
     }
 }
 
 
+
+/* -------------------------------------------------------------------------
+ * Filling Options
+ * ----------------------------------------------------------------------- */
 void
 OptionCont::add(char abbr, Option *option) {
     add(convert(abbr), option);
@@ -75,17 +79,19 @@ OptionCont::add(char abbr, Option *option) {
 void
 OptionCont::add(const std::string &name, Option *option) {
     // check whether the name is already used
-    ContType::iterator i = myOptionsMap.find(name);
+    std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i!=myOptionsMap.end()) {
         throw std::exception();// ("An option with the name '" + name + "' already exists.");
     }
     // check whether a synonyme already exists, if not, add the option to option's array
-    AddressContType::iterator j = find(myOptions.begin(), myOptions.end(), option);
+    std::vector<Option*>::const_iterator j = find(myOptions.begin(), myOptions.end(), option);
     if(j==myOptions.end()) {
         myOptions.push_back(option);
+        // add the option to the sections, if given
+        myOption2Section[option] = myCurrentSection;
     }
     // add the option to the name-to-option map
-    myOptionsMap.insert(ContType::value_type(name, option));
+    myOptionsMap.insert(std::map<std::string, Option*>::value_type(name, option));
 }
 
 
@@ -114,6 +120,29 @@ OptionCont::addSynonyme(const std::string &name1, const std::string &name2) {
 }
 
 
+void
+OptionCont::setDescription(const std::string &name, const std::string &desc) {
+    Option *o = getOption(name);
+    o->setDescription(desc);
+}
+
+
+void 
+OptionCont::beginSection(const std::string &name) {
+    myCurrentSection = name;
+}
+
+
+void 
+OptionCont::setHelpHeadAndTail(const std::string &head, const std::string &tail) {
+    myHelpHead = head;
+    myHelpTail = tail;
+}
+
+
+/* -------------------------------------------------------------------------
+ * Filling Options
+ * ----------------------------------------------------------------------- */
 int
 OptionCont::getInteger(const std::string &name) const {
     Option_Integer *o = dynamic_cast<Option_Integer*>(getOptionSecure(name));
@@ -206,7 +235,7 @@ OptionCont::set(const std::string &name, bool value) {
 
 Option *
 OptionCont::getOption(const string &name) const {
-    ContType::const_iterator i = myOptionsMap.find(name);
+    std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i==myOptionsMap.end()) {
         throw std::runtime_error("The option '" + name + "' is not known.");
     }
@@ -216,7 +245,7 @@ OptionCont::getOption(const string &name) const {
 
 Option *
 OptionCont::getOptionSecure(const string &name) const {
-    ContType::const_iterator i = myOptionsMap.find(name);
+    std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i==myOptionsMap.end()) {
         return 0;
     }
@@ -226,7 +255,7 @@ OptionCont::getOptionSecure(const string &name) const {
 
 bool
 OptionCont::contains(const string &name) const {
-    ContType::const_iterator i = myOptionsMap.find(name);
+    std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     return i!=myOptionsMap.end();
 }
 
@@ -237,10 +266,11 @@ OptionCont::getSynonymes(const std::string &name) const {
     return getSynonymes(o);
 }
 
+
 std::vector<std::string>
 OptionCont::getSynonymes(const Option* const option) const {
     vector<string> ret;
-    for(ContType::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
+    for(std::map<std::string, Option*>::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
         if((*i).second==option) {
             ret.push_back((*i).first);
         }
@@ -251,7 +281,7 @@ OptionCont::getSynonymes(const Option* const option) const {
 
 void
 OptionCont::remarkUnset() {
-    for(AddressContType::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
+    for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
         (*i)->remarkSetable();
     }
 }
@@ -268,33 +298,37 @@ OptionCont::convert(char abbr) {
 
 
 void
-OptionCont::setDescription(const std::string &name, const std::string &desc) {
-    Option *o = getOption(name);
-    o->setDescription(desc);
-}
-
-
-void
-OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider) const {
+OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, size_t sectionIndent) const {
     // compute needed width
     size_t maxWidth = 0;
-    for(AddressContType::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
+    for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
         std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
         maxWidth = maxWidth<optNames.length() ? optNames.length() : maxWidth;
     }
     // build the indent
-    std::string optionIndentSting;
+    std::string optionIndentSting, sectionIndentSting;
     for(size_t i=0; i<optionIndent; ++i) {
         optionIndentSting += " ";
     }
+    for(size_t i=0; i<sectionIndent; ++i) {
+        sectionIndentSting += " ";
+    }
     // 
+    os << myHelpHead;
+    std::string lastSection;
     compareByLength c;
-    for(AddressContType::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
+    for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
+        // check whether a new section starts
+        std::string optSection = myOption2Section.find(*i)->second;
+        if(lastSection!=optSection) {
+            lastSection = optSection;
+            os << sectionIndentSting << lastSection << std::endl;
+        }
         // write the option
         std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
+        // write the divider
         os << optionIndentSting << optNames;
         size_t owidth = optNames.length();
-        // write the divider
         // write the description
         size_t beg = 0;
         std::string desc = (*i)->getDescription();
@@ -316,13 +350,14 @@ OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider) con
         }
         os << std::endl;
     }
+    os << myHelpTail;
 }
 
 std::ostream &
 operator<<(std::ostream &os, const OptionCont &oc) {
     vector<string> known;
     known.reserve(oc.myOptionsMap.size());
-    for(OptionCont::ContType::const_iterator i=oc.myOptionsMap.begin(); i!=oc.myOptionsMap.end(); i++) {
+    for(std::map<std::string, Option*>::const_iterator i=oc.myOptionsMap.begin(); i!=oc.myOptionsMap.end(); i++) {
         vector<string>::iterator j=find(known.begin(), known.end(), (*i).first);
         if(j==known.end()) {
             Option *o = (*i).second;

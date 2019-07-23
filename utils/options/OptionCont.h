@@ -64,6 +64,10 @@ public:
     ~OptionCont();
 
 
+
+    /// @brief Filling Options
+    /// @{
+
     /** @brief Registers an option under an abbreviation
 	 * @param[in] abbr The option's abbreviated name
 	 * @param[in] option The option
@@ -92,6 +96,35 @@ public:
 	 */
     void addSynonyme(const std::string &name1, const std::string &name2);
 
+
+    /** @brief Sets the description for an already added option
+     *
+     * The description is what appears in the help menu
+	 * @param[in] name The name of the option
+	 * @param[in] desc The description of the option
+	 */
+    void setDescription(const std::string &name, const std::string &desc);
+
+
+    /** @brief Starts a new section
+     *
+     * Options will be stored under this section until a new starts.
+	 * @param[in] name The name of the section
+	 */
+    void beginSection(const std::string &name);
+
+
+    /** @brief Sets the head and the tail of the help output
+	 * @param[in] head The head of the help output
+	 * @param[in] tail The tail of the help output
+	 */
+    void setHelpHeadAndTail(const std::string &head, const std::string &tail);
+    /// @}
+
+
+
+    /// @brief Retrieving Values
+    /// @{
 
     /** @brief Returns the integer value of the named option
      * @param[in] name The name of the option to retrieve the value from
@@ -135,18 +168,11 @@ public:
     bool isBool(const std::string &name) const;
 
 
-    /** @brief Sets the given value to the given option
-     * @param[in] name The name of the option to set
-	 * @param[in] value The value to set
-     */
-    void set(const std::string &name, const std::string &value);
-
-
-    /** @brief Sets the given value to the given option (boolean options only)
-	 * @param[in] name The name of the option to set
-	 * @param[in] value The value to set
+    /** @brief Returns the information whether the named option is known
+	 * @param[in] name The name of the option
+	 * @return Whether the option is known
 	 */
-    void set(const std::string &name, bool value=true);
+    bool contains(const std::string &name) const;
 
 
     /** @brief Returns the list of synonymes to the given option name
@@ -161,27 +187,12 @@ public:
 	 * @return List of this option's names
 	 */
     std::vector<std::string> getSynonymes(const Option* const option) const;
+    /// @}
 
 
-    /// @brief Remarks all options as unset
-    void remarkUnset();
 
-
-    /** @brief Returns the information whether the named option is known
-	 * @param[in] name The name of the option
-	 * @return Whether the option is known
-	 */
-    bool contains(const std::string &name) const;
-
-
-    /** @brief Sets the description for an already added option
-     *
-     * The description is what appears in the help menu
-	 * @param[in] name The name of the option
-	 * @param[in] desc The description of the option
-	 */
-    void setDescription(const std::string &name, const std::string &desc);
-
+    /// @brief Input / Output
+    /// @{
 
     /** @brief Output operator
      * @param[out] os The stream to write to
@@ -195,9 +206,32 @@ public:
      *
      * First, the help header is printed. Then, the method iterates over the
      *  known options. In the end, the help tail is printed.
-     * @param[out] os The stream to write to
+     * @param[in] os The stream to write to
+     * @param[in] optionIndent The indent to use before writing an option
+     * @param[in] divider The space between the option name and the description
+     * @param[in] sectionIndent The indent to use before writing a section name
 	 */
-    void printHelp(std::ostream &os, size_t optionIndent=3, size_t divider=4) const;
+    void printHelp(std::ostream &os, size_t optionIndent=3, size_t divider=4, size_t sectionIndent=1) const;
+    /// @}
+
+
+
+    /** @brief Sets the given value to the given option
+     * @param[in] name The name of the option to set
+	 * @param[in] value The value to set
+     */
+    void set(const std::string &name, const std::string &value);
+
+
+    /** @brief Sets the given value to the given option (boolean options only)
+	 * @param[in] name The name of the option to set
+	 * @param[in] value The value to set
+	 */
+    void set(const std::string &name, bool value=true);
+
+
+    /// @brief Remarks all options as unset
+    void remarkUnset();
 
 
 
@@ -246,19 +280,23 @@ private:
 
 
 private:
-    /// @brief Definition of a map from option names to options
-    typedef std::map<std::string, Option*> ContType;
-
-    /// @brief Definition of a list of options
-    typedef std::vector<Option*> AddressContType;
-
-
-private:
     /// @brief A map from option names to options
-    ContType myOptionsMap;
+    std::map<std::string, Option*> myOptionsMap;
 
     /// @brief The list of known options
-    AddressContType myOptions;
+    std::vector<Option*> myOptions;
+
+    /// @brief The sections
+    std::vector<std::string> mySections;
+
+    /// @brief The sections
+    std::map<Option*, std::string> myOption2Section;
+
+    /// @brief THe last section added
+    std::string myCurrentSection;
+
+    /// @brief The head and the tail of the help pages
+    std::string myHelpHead, myHelpTail;
 
 
 private:
