@@ -27,7 +27,7 @@
 /* =========================================================================
  * included modules
  * ======================================================================= */
-#include "OptionCont.h"
+#include "OptionsCont.h"
 #include "OptionsIO.h"
 #include "OptionsLoader.h"
 #include "OptionsParser.h"
@@ -62,7 +62,7 @@ using namespace std;
  * method definitions
  * ======================================================================= */
 bool
-OptionsIO::parseAndLoad(OptionCont &into, int argc, char **argv,
+OptionsIO::parseAndLoad(OptionsCont &into, int argc, char **argv,
                         const std::string &configurationName,
                         bool , bool ) {
     bool ok = OptionsParser::parse(into, argc, argv);
@@ -75,7 +75,7 @@ OptionsIO::parseAndLoad(OptionCont &into, int argc, char **argv,
 
 
 bool
-OptionsIO::load(OptionCont &into, const std::string &configurationName) {
+OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
     if(configurationName.length()==0) {
         return true;
     }

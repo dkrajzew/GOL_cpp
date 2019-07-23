@@ -49,7 +49,7 @@
 /* =========================================================================
  * class declarations
  * ======================================================================= */
-class OptionCont;
+class OptionsCont;
 
 
 /* =========================================================================
@@ -69,7 +69,7 @@ public:
 	 * @param[in] options The options to fill
 	 * @param[in] file The configuration file to load
      */
-    OptionsLoader(OptionCont *options, const std::string &file);
+    OptionsLoader(OptionsCont *options, const std::string &file);
 
 
     /// @brief Destructor
@@ -115,7 +115,7 @@ public:
 
 private:
     /// @brief The options to fill
-    OptionCont *myOptions;
+    OptionsCont *myOptions;
 
     /// @brief The name of the current option to set
     std::string myCurrentOptionName;

@@ -41,7 +41,7 @@
 #include <string>
 #include <utils/exceptions/InvalidArgument.h>
 #include "OptionsLoader.h"
-#include "OptionCont.h"
+#include "OptionsCont.h"
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -63,7 +63,7 @@ using namespace XERCES_CPP_NAMESPACE;
 /* =========================================================================
  * method definitions
  * ======================================================================= */
-OptionsLoader::OptionsLoader(OptionCont *options,
+OptionsLoader::OptionsLoader(OptionsCont *options,
                              const std::string &file)
     : myOptions(options), myHadError(false), myFileName(file) {
 }

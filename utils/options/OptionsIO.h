@@ -43,7 +43,7 @@
 /* =========================================================================
  * class declarations
  * ======================================================================= */
-class OptionCont;
+class OptionsCont;
 
 
 
@@ -69,7 +69,7 @@ public:
      * @todo continueOnError is not used
      * @todo acceptUnknown is not used
      */
-    static bool parseAndLoad(OptionCont &into, int argc, char **argv,
+    static bool parseAndLoad(OptionsCont &into, int argc, char **argv,
 		const std::string &configurationName, bool continueOnError=false,
 		bool acceptUnknown=false);
 
@@ -79,7 +79,7 @@ private:
 	 * @param[in] into The options container to fill
 	 * @param[in] configurationName The path to the configuration to load (XML)
 	 */
-    static bool load(OptionCont &into, const std::string &configurationName);
+    static bool load(OptionsCont &into, const std::string &configurationName);
 
 
 };

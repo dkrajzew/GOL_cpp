@@ -33,7 +33,7 @@
 #include <iostream>
 #include <sstream>
 #include "Option.h"
-#include "OptionCont.h"
+#include "OptionsCont.h"
 #include "OptionsParser.h"
 
 /* -------------------------------------------------------------------------
@@ -56,7 +56,7 @@ using namespace std;
  * method definitions
  * ======================================================================= */
 bool
-OptionsParser::parse(OptionCont &into, int argc, char **argv, bool continueOnError, bool ) {
+OptionsParser::parse(OptionsCont &into, int argc, char **argv, bool continueOnError, bool ) {
     bool ok = true;
     for(int pos=1; pos<argc;) {
         // try to parse a token combination
@@ -82,7 +82,7 @@ OptionsParser::parse(OptionCont &into, int argc, char **argv, bool continueOnErr
 
 
 int
-OptionsParser::parse(OptionCont &into, char **args, int pos, int argc) {
+OptionsParser::parse(OptionsCont &into, char **args, int pos, int argc) {
     // an option name indicator must have at least two characters
     if(strlen(args[pos])>=2) {
         if(args[pos][0]=='-'&&args[pos][1]!='-') {
@@ -103,7 +103,7 @@ OptionsParser::parse(OptionCont &into, char **args, int pos, int argc) {
 
 
 int
-OptionsParser::parseAbbreviation(OptionCont &into, char **args, int pos, int argc) {
+OptionsParser::parseAbbreviation(OptionsCont &into, char **args, int pos, int argc) {
     string options = string(args[pos]).substr(1);
     size_t len = options.length();
     vector<string> usingParameter;
@@ -166,7 +166,7 @@ OptionsParser::parseAbbreviation(OptionCont &into, char **args, int pos, int arg
 
 
 int
-OptionsParser::parseFull(OptionCont &into,
+OptionsParser::parseFull(OptionsCont &into,
                          char **args, int pos, int argc) {
     string option = string(args[pos]).substr(2);
     string value;

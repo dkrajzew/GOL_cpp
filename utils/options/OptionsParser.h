@@ -44,7 +44,7 @@
 /* =========================================================================
  * class declarations
  * ======================================================================= */
-class OptionCont;
+class OptionsCont;
 
 
 
@@ -65,7 +65,7 @@ public:
 	 * @param[in] acceptUnknown Unknown options do not throw an exception
      * @todo acceptUnknown is not used
 	 */
-    static bool parse(OptionCont &into, int argc, char **argv,
+    static bool parse(OptionsCont &into, int argc, char **argv,
 		bool continueOnError=true, bool acceptUnknown=false);
 
 
@@ -77,7 +77,7 @@ private:
 	 * @param[in] argc The number of arguments given on the command line
 	 * @return The number of arguments to proceed
 	 */
-    static int parse(OptionCont &into, char **argv, int pos, int argc);
+    static int parse(OptionsCont &into, char **argv, int pos, int argc);
 
 
     /** @brief Parses a single, abbreviated option into the container
@@ -87,7 +87,7 @@ private:
 	 * @param[in] argc The number of arguments given on the command line
 	 * @return The number of arguments to proceed
 	 */
-    static int parseAbbreviation(OptionCont &into, char **argv, int pos, int argc);
+    static int parseAbbreviation(OptionsCont &into, char **argv, int pos, int argc);
 
 
     /** @brief Parses a single, fully-named option into the container
@@ -97,7 +97,7 @@ private:
 	 * @param[in] argc The number of arguments given on the command line
 	 * @return The number of arguments to proceed
 	 */
-    static int parseFull(OptionCont &into, char **argv, int pos, int argc);
+    static int parseFull(OptionsCont &into, char **argv, int pos, int argc);
 
 
     /** @brief Converts the given char* into a string

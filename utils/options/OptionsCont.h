@@ -1,9 +1,9 @@
-#ifndef OptionCont_h
-#define OptionCont_h
+#ifndef OptionsCont_h
+#define OptionsCont_h
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionCont
+   module:       OptionsCont
    purpose:      Container for options
    begin:        03.03.2004
    copyright:    (C) Daniel Krajzewicz
@@ -51,17 +51,17 @@ class Option_String;
  * class definitions
  * ======================================================================= */
 /**
- * @class OptionCont
+ * @class OptionsCont
  * Container for options.
  */
-class OptionCont {
+class OptionsCont {
 public:
     /// @brief Constructor
-    OptionCont();
+    OptionsCont();
 
 
     /// @brief Destructor
-    ~OptionCont();
+    ~OptionsCont();
 
 
 
@@ -199,7 +199,7 @@ public:
      * @param[in] oc The output container to write
      * @return The stream to write to
 	 */
-    friend std::ostream &operator<<(std::ostream &os, const OptionCont &oc);
+    friend std::ostream &operator<<(std::ostream &os, const OptionsCont &oc);
 
 
     /** @brief Prints the help screen
@@ -301,10 +301,10 @@ private:
 
 private:
     /// @brief Invalidated copy constructor
-    OptionCont(const OptionCont &s);
+    OptionsCont(const OptionsCont &s);
 
     /// @brief Invalidated assignment operator
-    OptionCont &operator=(const OptionCont &s);
+    OptionsCont &operator=(const OptionsCont &s);
 
 
 };

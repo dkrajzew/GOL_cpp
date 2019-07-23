@@ -1,7 +1,7 @@
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionCont
+   module:       OptionsCont
    purpose:      Container for options
    begin:        03.03.2004
    copyright:    (C) Daniel Krajzewicz
@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <sstream>
 #include "Option.h"
-#include "OptionCont.h"
+#include "OptionsCont.h"
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -55,11 +55,11 @@ using namespace std;
 /* =========================================================================
  * method definitions
  * ======================================================================= */
-OptionCont::OptionCont() {
+OptionsCont::OptionsCont() {
 }
 
 
-OptionCont::~OptionCont() {
+OptionsCont::~OptionsCont() {
     for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
         delete *i;
     }
@@ -71,13 +71,13 @@ OptionCont::~OptionCont() {
  * Filling Options
  * ----------------------------------------------------------------------- */
 void
-OptionCont::add(char abbr, Option *option) {
+OptionsCont::add(char abbr, Option *option) {
     add(convert(abbr), option);
 }
 
 
 void
-OptionCont::add(const std::string &name, Option *option) {
+OptionsCont::add(const std::string &name, Option *option) {
     // check whether the name is already used
     std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i!=myOptionsMap.end()) {
@@ -96,14 +96,14 @@ OptionCont::add(const std::string &name, Option *option) {
 
 
 void
-OptionCont::add(const std::string &name, char abbr, Option *option) {
+OptionsCont::add(const std::string &name, char abbr, Option *option) {
     add(name, option);
     add(convert(abbr), option);
 }
 
 
 void
-OptionCont::addSynonyme(const std::string &name1, const std::string &name2) {
+OptionsCont::addSynonyme(const std::string &name1, const std::string &name2) {
     Option *o1 = getOptionSecure(name1);
     Option *o2 = getOptionSecure(name2);
     if(o1==0&&o2==0) {
@@ -121,20 +121,20 @@ OptionCont::addSynonyme(const std::string &name1, const std::string &name2) {
 
 
 void
-OptionCont::setDescription(const std::string &name, const std::string &desc) {
+OptionsCont::setDescription(const std::string &name, const std::string &desc) {
     Option *o = getOption(name);
     o->setDescription(desc);
 }
 
 
 void 
-OptionCont::beginSection(const std::string &name) {
+OptionsCont::beginSection(const std::string &name) {
     myCurrentSection = name;
 }
 
 
 void 
-OptionCont::setHelpHeadAndTail(const std::string &head, const std::string &tail) {
+OptionsCont::setHelpHeadAndTail(const std::string &head, const std::string &tail) {
     myHelpHead = head;
     myHelpTail = tail;
 }
@@ -144,7 +144,7 @@ OptionCont::setHelpHeadAndTail(const std::string &head, const std::string &tail)
  * Filling Options
  * ----------------------------------------------------------------------- */
 int
-OptionCont::getInteger(const std::string &name) const {
+OptionsCont::getInteger(const std::string &name) const {
     Option_Integer *o = dynamic_cast<Option_Integer*>(getOptionSecure(name));
     if(o==0) {
         throw std::runtime_error("This is not an integer option!");
@@ -157,7 +157,7 @@ OptionCont::getInteger(const std::string &name) const {
 
 
 bool
-OptionCont::getBool(const std::string &name) const {
+OptionsCont::getBool(const std::string &name) const {
     Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
     if(o==0) {
         throw std::runtime_error("This is not an bool option!");
@@ -170,7 +170,7 @@ OptionCont::getBool(const std::string &name) const {
 
 
 double
-OptionCont::getDouble(const std::string &name) const {
+OptionsCont::getDouble(const std::string &name) const {
     Option_Double *o = dynamic_cast<Option_Double*>(getOptionSecure(name));
     if(o==0) {
         throw std::runtime_error("This is not an double option!");
@@ -183,7 +183,7 @@ OptionCont::getDouble(const std::string &name) const {
 
 
 const std::string &
-OptionCont::getString(const std::string &name) const {
+OptionsCont::getString(const std::string &name) const {
     Option_String *o = dynamic_cast<Option_String*>(getOptionSecure(name));
     if(o==0) {
         throw std::runtime_error("This is not an string option!");
@@ -196,14 +196,14 @@ OptionCont::getString(const std::string &name) const {
 
 
 bool
-OptionCont::isSet(const std::string &name) const {
+OptionsCont::isSet(const std::string &name) const {
     Option *o = getOption(name);
     return o->isSet();
 }
 
 
 bool
-OptionCont::isBool(const std::string &name) const {
+OptionsCont::isBool(const std::string &name) const {
     Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
     if(o==0) {
         return false;
@@ -213,14 +213,14 @@ OptionCont::isBool(const std::string &name) const {
 
 
 void
-OptionCont::set(const std::string &name, const std::string &value) {
+OptionsCont::set(const std::string &name, const std::string &value) {
     Option *o = getOption(name);
     o->set(value);
 }
 
 
 void
-OptionCont::set(const std::string &name, bool value) {
+OptionsCont::set(const std::string &name, bool value) {
     Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
     if(o==0) {
         throw std::runtime_error("This is not a boolean option");
@@ -234,7 +234,7 @@ OptionCont::set(const std::string &name, bool value) {
 
 
 Option *
-OptionCont::getOption(const string &name) const {
+OptionsCont::getOption(const string &name) const {
     std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i==myOptionsMap.end()) {
         throw std::runtime_error("The option '" + name + "' is not known.");
@@ -244,7 +244,7 @@ OptionCont::getOption(const string &name) const {
 
 
 Option *
-OptionCont::getOptionSecure(const string &name) const {
+OptionsCont::getOptionSecure(const string &name) const {
     std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i==myOptionsMap.end()) {
         return 0;
@@ -254,21 +254,21 @@ OptionCont::getOptionSecure(const string &name) const {
 
 
 bool
-OptionCont::contains(const string &name) const {
+OptionsCont::contains(const string &name) const {
     std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     return i!=myOptionsMap.end();
 }
 
 
 std::vector<std::string>
-OptionCont::getSynonymes(const std::string &name) const {
+OptionsCont::getSynonymes(const std::string &name) const {
     Option *o = getOption(name);
     return getSynonymes(o);
 }
 
 
 std::vector<std::string>
-OptionCont::getSynonymes(const Option* const option) const {
+OptionsCont::getSynonymes(const Option* const option) const {
     vector<string> ret;
     for(std::map<std::string, Option*>::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
         if((*i).second==option) {
@@ -280,7 +280,7 @@ OptionCont::getSynonymes(const Option* const option) const {
 
 
 void
-OptionCont::remarkUnset() {
+OptionsCont::remarkUnset() {
     for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
         (*i)->remarkSetable();
     }
@@ -288,7 +288,7 @@ OptionCont::remarkUnset() {
 
 
 std::string
-OptionCont::convert(char abbr) {
+OptionsCont::convert(char abbr) {
     char buf[2];
     buf[0] = abbr;
     buf[1] = 0;
@@ -298,7 +298,7 @@ OptionCont::convert(char abbr) {
 
 
 void
-OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, size_t sectionIndent) const {
+OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, size_t sectionIndent) const {
     // compute needed width
     size_t maxWidth = 0;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
@@ -354,7 +354,7 @@ OptionCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, siz
 }
 
 std::ostream &
-operator<<(std::ostream &os, const OptionCont &oc) {
+operator<<(std::ostream &os, const OptionsCont &oc) {
     vector<string> known;
     known.reserve(oc.myOptionsMap.size());
     for(std::map<std::string, Option*>::const_iterator i=oc.myOptionsMap.begin(); i!=oc.myOptionsMap.end(); i++) {
@@ -386,7 +386,7 @@ operator<<(std::ostream &os, const OptionCont &oc) {
 }
 
 std::string 
-OptionCont::getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const {
+OptionsCont::getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const {
     compareByLength c;
     std::vector<std::string> synonymes = getSynonymes(option);
     std::sort(synonymes.begin(), synonymes.end(), c);

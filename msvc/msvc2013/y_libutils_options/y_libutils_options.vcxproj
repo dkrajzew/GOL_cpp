@@ -92,14 +92,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\utils\options\Option.h" />
-    <ClInclude Include="..\..\..\utils\options\OptionCont.h" />
+    <ClInclude Include="..\..\..\utils\options\OptionsCont.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsIO.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsLoader.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsParser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\utils\options\Option.cpp" />
-    <ClCompile Include="..\..\..\utils\options\OptionCont.cpp" />
+    <ClCompile Include="..\..\..\utils\options\OptionsCont.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsIO.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsLoader.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsParser.cpp" />

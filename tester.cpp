@@ -32,7 +32,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <utils/options/OptionCont.h>
+#include <utils/options/OptionsCont.h>
 #include <utils/options/Option.h>
 #include <utils/options/OptionsIO.h>
 
@@ -63,7 +63,7 @@ using namespace std;
 /* =========================================================================
  * static member definitions
  * ======================================================================= */
-OptionCont myOptions;
+OptionsCont myOptions;
 
 
 
