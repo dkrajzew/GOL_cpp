@@ -182,8 +182,6 @@ loadDefinition() {
             }
         }
     }
-    // add default tester options
-    myOptions.add("tester.help", new Option_Bool(false));
     return STAT_OK;
 }
 
@@ -198,11 +196,10 @@ main(int argc, char *argv[]) {
             if(!OptionsIO::parseAndLoad(myOptions, argc, argv, "")) {
                 ret = STAT_READ_COMMENT;
             }
-            if(myOptions.contains("tester.help")&&myOptions.getBool("tester.help")) {
-                myOptions.printHelp(std::cout);
-            }
+            myOptions.printHelp(std::cout);
             std::cout << "-------------------------------------------------------------------------------" << std::endl;
-            std::cout << myOptions << std::endl;
+            std::cout << myOptions;
+            std::cout << "-------------------------------------------------------------------------------" << std::endl;
         } catch(std::exception &e) {
             if(dynamic_cast<std::runtime_error*>(&e)!=0) {
                 std::cerr << "Got std::runtime_error: " << dynamic_cast<std::runtime_error*>(&e)->what() << std::endl;

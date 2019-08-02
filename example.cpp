@@ -52,14 +52,6 @@ using namespace std;
 
 
 /* =========================================================================
- * definitions
- * ======================================================================= */
-#define APPNAME "options_example"
-#define APPVERSION "1.0.0"
-
-
-
-/* =========================================================================
  * static member definitions
  * ======================================================================= */
 OptionsCont myOptions;
@@ -92,25 +84,10 @@ getOptions(int argc, char *argv[]) {
     myOptions.add("repeat", 'r', new Option_Integer());
     myOptions.setDescription("repeat", "Sets an optional number of repetitions.");
     //
-    myOptions.add("version", new Option_Bool(false));
-    myOptions.setDescription("version", "Prints the version.");
     myOptions.add("help", '?', new Option_Bool(false));
     myOptions.setDescription("help", "Prints this help screen.");
     // parse
     return OptionsIO::parseAndLoad(myOptions, argc, argv, "");
-}
-
-
-void
-printAppVersion() {
-    cout << APPNAME << " " << APPVERSION << endl;
-}
-
-
-void
-printCopyrightAndContact() {
-    cout << " (c) Daniel Krajzewicz" << endl;
-    cout << "  http://www.krajzewicz.de/" << endl << endl;
 }
 
 
@@ -126,12 +103,7 @@ main(int argc, char *argv[]) {
         // check for additional (meta) options
         if(myOptions.getBool("help")) {
             // print the help screen
-            printAppVersion();
-            printCopyrightAndContact();
             myOptions.printHelp(std::cout);
-        } else if(myOptions.getBool("version")) {
-            // print version
-            printAppVersion();
         } else {
             // do something
             std::string name = myOptions.getString("name");
