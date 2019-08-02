@@ -166,21 +166,8 @@ Option_Integer::getTypeName() {
 
 void 
 Option_Integer::set(const std::string &value) {
+    myValue = parseInteger(value.c_str());
     setSet();
-    // adapted from https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c/6154614#6154614
-    char *end;
-    errno = 0;
-    long l = strtol(value.c_str(), &end, 0); // base=0->guess
-    if ((errno == ERANGE && l == LONG_MAX) || l > INT_MAX) {
-        throw std::runtime_error("overflow");
-    }
-    if ((errno == ERANGE && l == LONG_MIN) || l < INT_MIN) {
-        throw std::runtime_error("underflow");
-    }
-    if (value.c_str() == '\0' || *end != '\0') {
-        throw std::runtime_error("inconvertible");
-    }
-    myValue = l;
 }
 
 
@@ -197,6 +184,27 @@ Option_Integer::getValueAsString() const {
     return oss.str();
 }
 
+
+int 
+Option_Integer::parseInteger(const char *data) {
+    // adapted from https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c/6154614#6154614
+    if(data==0||data[0]==0) {
+        throw runtime_error("inconvertible");
+    }
+    char *end;
+    errno = 0;
+    long l = strtol(data, &end, 0); // base=0->guess
+    if ((errno == ERANGE && l == LONG_MAX) || l > INT_MAX) {
+        throw std::runtime_error("overflow");
+    }
+    if ((errno == ERANGE && l == LONG_MIN) || l < INT_MIN) {
+        throw std::runtime_error("underflow");
+    }
+    if (data == '\0' || *end != '\0') {
+        throw std::runtime_error("inconvertible");
+    }
+    return l;
+}
 
 
 /* -------------------------------------------------------------------------
@@ -315,14 +323,8 @@ Option_Double::getTypeName() {
 
 void 
 Option_Double::set(const std::string &value) {
+    myValue = parseDouble(value.c_str());
     setSet();
-    char *end;
-    errno = 0;
-    double d = strtod(value.c_str(), &end);
-    if (errno!=0) {
-        throw std::runtime_error("inconvertible");
-    }
-    myValue = d;
 }
 
 
@@ -339,6 +341,63 @@ Option_Double::getValueAsString() const {
     return oss.str();
 }
 
+
+double 
+Option_Double::parseDouble(const char *data) {
+    if(data==0||data[0]==0) {
+        throw runtime_error("inconvertible");
+    }
+    double ret = 0;
+    int i = 0;
+    double sgn = 1;
+    if(data[0]=='+') {
+        i++;
+    } else if(data[0]=='-') {
+        i++;
+        sgn = -1;
+    }
+    for(; data[i]!=0&&data[i]!='.'&&data[i]!=','&&data[i]!='e'&&data[i]!='E'; ++i) {
+        ret = ret * 10;
+        char akt = (char) data[i];
+        if(akt<'0'||akt>'9') {
+            throw runtime_error("inconvertible");
+        }
+        ret = ret + akt - 48;
+    }
+    // check what has happened - end of string, e or decimal point
+    if((char) data[i]!='.'&&(char) data[i]!=','&&data[i]!='e'&&data[i]!='E') {
+        if(i==0) {
+            throw runtime_error("inconvertible");
+        }
+        return ret * sgn;
+    }
+    if(data[i]=='e'||data[i]=='E') {
+        // no decimal point, just an exponent
+        int exp = Option_Integer::parseInteger(data+i+1);
+        float exp2 = (float) pow(10.0, exp);
+        return ret*sgn*exp2;
+    }
+    float div = 10;
+    // skip the dot
+    ++i;
+    // parse values behin decimal point
+    for(; data[i]!=0&&data[i]!='e'&&data[i]!='E'; ++i) {
+        char akt = (char) data[i];
+        if(akt<'0'||akt>'9') {
+            runtime_error("inconvertible");
+        }
+        ret = ret + ((float)(akt - 48)) / div;
+        div = div * 10;
+    }
+    if(data[i]!='e'&&data[i]!='E') {
+        // no exponent
+        return ret * sgn;
+    }
+    // eponent and decimal dot
+    int exp = Option_Integer::parseInteger(data+i+1);
+    float exp2 = (float) pow(10.0, exp);
+    return ret*sgn*exp2;
+}
 
 /* -------------------------------------------------------------------------
  * Option_String-methods
