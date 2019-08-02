@@ -246,6 +246,14 @@ public:
     std::string getValueAsString() const;
 
 
+    /** Parses the given string assuming it contains an integer
+     * @param[in] data The string to parse
+     * @return the parsed integer
+     * @throw runtime_error If the string could not been parsed to an integer
+     */
+    static int parseInteger(const char *data);
+
+
 
 private:
     /// @brief The integer value (if set)
@@ -384,6 +392,14 @@ public:
      * @return The value as a string, if set
 	 */
     std::string getValueAsString() const;
+
+
+    /** Parses the given string assuming it contains a double
+     * @param[in] data The string to parse
+     * @return the parsed double
+     * @throw runtime_error If the string could not been parsed to a double
+     */
+    static double parseDouble(const char *data);
 
 
 
