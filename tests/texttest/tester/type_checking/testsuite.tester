@@ -1,0 +1,15 @@
+check_bool_correct
+check_int_correct
+check_float_correct
+check_string_correct
+check_filename_correct
+
+check_bool_incorrect
+check_int_incorrect
+check_float_incorrect
+
+check_int_missing
+check_float_missing
+check_string_missing
+check_filename_missing
+

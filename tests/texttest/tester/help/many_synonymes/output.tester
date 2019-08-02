@@ -3,9 +3,7 @@
    -r, --repeat                                                                                         Sets an optional number of repetitions.
    --version                                                                                            Prints the version.
    -?, --help                                                                                           Prints this help screen.
-   --tester.help
 -------------------------------------------------------------------------------
 changing-how-to-call-the-user (changing-how-to-call-the-user, n, name, setting-the-user-name, the-name-to-call-the-user): World (default)
 g (g, greet): Hello (default)
-tester.help (tester.help): true
-
+-------------------------------------------------------------------------------
