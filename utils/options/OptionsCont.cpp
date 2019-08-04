@@ -314,7 +314,9 @@ OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, si
         sectionIndentSting += " ";
     }
     // 
-    os << myHelpHead;
+    if(myHelpHead.length()!=0) {
+        os << myHelpHead << std::endl;
+    }
     std::string lastSection;
     compareByLength c;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
@@ -350,7 +352,9 @@ OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, si
         }
         os << std::endl;
     }
-    os << myHelpTail;
+    if(myHelpTail.length()!=0) {
+        os << myHelpTail << std::endl;
+    }
 }
 
 std::ostream &

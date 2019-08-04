@@ -107,7 +107,7 @@ loadDefinition() {
             // ok, it's a subsection
         } else {
             // ok, it's an option
-            // ... parse it
+            // ... parse the line
             std::vector<std::string> synonymes;
             char abbr = '!';
             std::string type, description, defaultValue;
@@ -127,6 +127,16 @@ loadDefinition() {
                 } else {
                     synonymes.push_back(s);
                 }
+            }
+            // ... is it the tail/head help stuff?
+            if(type=="HELPHEADTAIL") {
+                myOptions.setHelpHeadAndTail(synonymes[0], synonymes[1]);
+                continue;
+            }
+            // ... is it a named section begin?
+            if(type=="SECTION") {
+                myOptions.beginSection(synonymes[0]);
+                continue;
             }
             // ... build the option, first
             Option *option = 0;
