@@ -1,0 +1,14 @@
+tester v1.0
+ Words
+   -n, --name      Defines how to call the user.
+   -g, --greet     Defines how to greet.
+ Processing
+   -r, --repeat    Sets an optional number of repetitions.
+ Meta
+   --version       Prints the version.
+   -?, --help      Prints this help screen.
+Have Fun!
+-------------------------------------------------------------------------------
+g (g, greet): Hello (default)
+n (n, name): World (default)
+-------------------------------------------------------------------------------
