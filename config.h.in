@@ -1,0 +1,9 @@
+/* src/config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 in order to enable memory checks. */
+#undef CHECK_MEMORY_LEAKS
+
+/* Define if auto-generated version.h should be used. */
+#undef HAVE_VERSION_H
+
+
