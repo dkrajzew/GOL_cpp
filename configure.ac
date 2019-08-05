@@ -4,10 +4,10 @@ AC_CONFIG_SRCDIR(example.cpp)
 AC_CANONICAL_SYSTEM
 
 dnl create an config-header               
-AC_CONFIG_HEADER(src/config.h)
+AC_CONFIG_HEADER(config.h)
 
 dnl enable automake-support
-AM_INIT_AUTOMAKE([foreign dist-zip tar-ustar])
+AM_INIT_AUTOMAKE([dist-zip tar-ustar])
 
 AC_LANG([C++])
 
@@ -31,15 +31,6 @@ else
     ac_disabled="$ac_disabled Debug"
 fi
 
-AC_ARG_ENABLE([pic], [AS_HELP_STRING([--enable-pic],[enable compilation of position-independent code [default=no],])])
-if test x$enable_pic = xyes; then
-    CXXFLAGS="-fPIC $CXXFLAGS"
-    ac_enabled="$ac_enabled PIC"
-else
-    ac_disabled="$ac_disabled PIC"
-fi
-
-
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
@@ -55,7 +46,7 @@ AM_PROG_LIBTOOL
 
 
 AM_CONDITIONAL([WITH_VERSION_H], test -d .git)
-if test -d .git || test x$PACKAGE_VERSION == xgit -a -f src/version.h; then
+if test -d .git || test x$PACKAGE_VERSION == xgit -a -f version.h; then
    AC_DEFINE([HAVE_VERSION_H], [1], [Define if auto-generated version.h should be used.])
 else
    AC_DEFINE_UNQUOTED(VERSION_STRING, "$PACKAGE_VERSION", [Defined if auto-generated version.h is unavailable.])
@@ -77,10 +68,9 @@ dnl Checks proposed by autoscan.
 dnl Checks for header files.
 AC_FUNC_ALLOCA
 AC_HEADER_STDC
-AC_CHECK_HEADERS([float.h limits.h malloc.h math.h stddef.h stdlib.h string.h sys/time.h unistd.h wchar.h])
+AC_CHECK_HEADERS([])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
@@ -93,7 +83,7 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_SELECT_ARGTYPES
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
-AC_CHECK_FUNCS([floor getcwd gettimeofday memset pow select socket sqrt])
+AC_CHECK_FUNCS([pow])
 
 
 dnl ---------------------------------------------

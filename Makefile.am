@@ -1,6 +1,10 @@
-SUBDIRS = utils msvc
+SUBDIRS = utils
 
-EXTRA_DIST = README.md ChangeLog AUTHORS CONTRIBUTING.md LICENSE NOTICE.md sumo.doxyconf
+EXTRA_DIST = msvc tests \
+config.h config.h.in \
+LICENSE README.md optionslib.doxyconf \
+windows_config.h
+
 
 doc: doxygen
 
@@ -9,11 +13,6 @@ doxygen:
 	mkdir docs/doxygen
 	doxygen sumo.doxyconf &> doxygen.log
 
-man:
-	rm -rf docs/man
-	mkdir docs/man
-	help2man -N -n "tests application for the options library" tester > docs/man/tester.1
-	help2man -N -n "example application for the options library" example > docs/man/example.1
 
 dist-hook: abs_distdir=`pwd`/$(distdir)
 dist-complete: 
@@ -27,5 +26,16 @@ dist-complete:
 	zip -r $(PACKAGE)-all-$(VERSION).zip $(distdir)
 	$(am__remove_distdir)
 
-tester$(EXEEXT) example$(EXEEXT):
-	$(MAKE) -C src $@
+bin_PROGRAMS = tester example
+
+tester_SOURCES = tester.cpp
+
+example_SOURCES = example.cpp
+
+tester_LDADD = ./utils/options/liboptions.a
+
+example_LDADD = ./utils/options/liboptions.a
+
+
+
+
