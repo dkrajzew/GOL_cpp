@@ -30,6 +30,8 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <math.h>
+#include <limits.h>
 #include "Option.h"
 
 /* -------------------------------------------------------------------------
@@ -200,7 +202,7 @@ Option_Integer::parseInteger(const char *data) {
     if ((errno == ERANGE && l == LONG_MIN) || l < INT_MIN) {
         throw std::runtime_error("underflow");
     }
-    if (data == '\0' || *end != '\0') {
+    if (*data == '\0' || *end != '\0') {
         throw std::runtime_error("inconvertible");
     }
     return l;
