@@ -250,13 +250,16 @@ Option_Bool::getTypeName() {
 void 
 Option_Bool::set(const std::string &v) {
     std::string value = v;
+#if defined __BORLANDC__
     // Borland does not know how to transform
     for(size_t i=0; i<value.length(); ++i) {
         if(value[i]>='A'&&value[i]<='Z') {
             value[i] = value[i] - ('A'-'a');
         }
     }
-    //std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+#else
+    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+#endif
     if(value=="t"||value=="true"||value=="1") {
         myValue = true;
     } else if(value=="f"||value=="false"||value=="0") {
