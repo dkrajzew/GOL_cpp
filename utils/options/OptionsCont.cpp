@@ -160,7 +160,7 @@ bool
 OptionsCont::getBool(const std::string &name) const {
     Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
     if(o==0) {
-        throw std::runtime_error("This is not an bool option!");
+        throw std::runtime_error("This is not a bool option!");
     }
     if(!o->isSet()) {
         throw std::runtime_error("The option is not set!");
@@ -173,7 +173,7 @@ double
 OptionsCont::getDouble(const std::string &name) const {
     Option_Double *o = dynamic_cast<Option_Double*>(getOptionSecure(name));
     if(o==0) {
-        throw std::runtime_error("This is not an double option!");
+        throw std::runtime_error("This is not a double option!");
     }
     if(!o->isSet()) {
         throw std::runtime_error("The option is not set!");
@@ -186,7 +186,7 @@ const std::string &
 OptionsCont::getString(const std::string &name) const {
     Option_String *o = dynamic_cast<Option_String*>(getOptionSecure(name));
     if(o==0) {
-        throw std::runtime_error("This is not an string option!");
+        throw std::runtime_error("This is not a string option!");
     }
     if(!o->isSet()) {
         throw std::runtime_error("The option is not set!");

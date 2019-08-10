@@ -250,7 +250,6 @@ Option_Bool::getTypeName() {
 void 
 Option_Bool::set(const std::string &v) {
     std::string value = v;
-    setSet();
     // Borland does not know how to transform
     for(size_t i=0; i<value.length(); ++i) {
         if(value[i]>='A'&&value[i]<='Z') {
@@ -265,6 +264,7 @@ Option_Bool::set(const std::string &v) {
     } else {
         throw std::runtime_error("inconvertible");
     }
+    setSet();
 }
 
 

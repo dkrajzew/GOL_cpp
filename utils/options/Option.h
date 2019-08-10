@@ -169,7 +169,7 @@ protected:
 
 
 private:
-    //// @brief Information whether a new value can be assigned
+    /// @brief Information whether a new value can be assigned
     bool myAmSetable;
 
     /// @brief Information whether this option's value may be read
