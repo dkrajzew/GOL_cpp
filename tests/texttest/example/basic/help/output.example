@@ -1,4 +1,4 @@
-Usage: options_example [option]+
+Usage: example [option]+
 
 Options:
    -n, --name      Defines how to call the user.

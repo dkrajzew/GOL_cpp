@@ -213,12 +213,7 @@ Option_Integer::parseInteger(const char *data) {
  * Option_Bool-methods
  * ----------------------------------------------------------------------- */
 Option_Bool::Option_Bool()
-    : Option() {
-}
-
-
-Option_Bool::Option_Bool(bool value)
-    : Option(true), myValue(value) {
+    : Option(true), myValue(false) {
 }
 
 

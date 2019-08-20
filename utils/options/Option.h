@@ -270,14 +270,11 @@ private:
  */
 class Option_Bool : public Option {
 public:
-    /// @brief Constructor to use if no default is given
+    /** @brief Constructor to use if no default is given
+     * 
+     * For boolean options, the default is always set to false
+     */
     Option_Bool();
-
-
-    /** @brief Constructor to use if a default shall be set
-	 * @param[in] value The value to set
-	 */
-    Option_Bool(bool value);
 
 
     /** @brief Copying constructor

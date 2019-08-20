@@ -4,6 +4,8 @@
    --version       Prints the version.
    -?, --help      Prints this help screen.
 -------------------------------------------------------------------------------
+? (?, help): false (default)
 g (g, greet): Hello (default)
 n (n, name): World (default)
+version (version): false (default)
 -------------------------------------------------------------------------------

@@ -9,6 +9,8 @@ tester v1.0
    -?, --help      Prints this help screen.
 Have Fun!
 -------------------------------------------------------------------------------
+? (?, help): false (default)
 g (g, greet): Hello (default)
 n (n, name): World (default)
+version (version): false (default)
 -------------------------------------------------------------------------------

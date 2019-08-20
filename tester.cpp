@@ -158,7 +158,7 @@ loadDefinition() {
                 if(defaultValue.length()==0) {
                     option = new Option_Bool();
                 } else {
-                    option = new Option_Bool(defaultValue[0]=='t');
+                    option = new Option_Bool();
                 }
             } else if(type=="STRING") {
                 if(defaultValue.length()==0) {

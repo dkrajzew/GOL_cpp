@@ -75,7 +75,7 @@ enum ReturnCodes {
  * ======================================================================= */
 bool
 getOptions(int argc, char *argv[]) {
-    myOptions.setHelpHeadAndTail("Usage: options_example [option]+\n\nOptions:\n","");
+    myOptions.setHelpHeadAndTail("Usage: example [option]+\n\nOptions:","");
     // function
     myOptions.add("name", 'n', new Option_String("World"));
     myOptions.setDescription("name", "Defines how to call the user.");
@@ -84,7 +84,7 @@ getOptions(int argc, char *argv[]) {
     myOptions.add("repeat", 'r', new Option_Integer());
     myOptions.setDescription("repeat", "Sets an optional number of repetitions.");
     //
-    myOptions.add("help", '?', new Option_Bool(false));
+    myOptions.add("help", '?', new Option_Bool());
     myOptions.setDescription("help", "Prints this help screen.");
     // parse
     return OptionsIO::parseAndLoad(myOptions, argc, argv, "");
