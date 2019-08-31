@@ -29,12 +29,12 @@
  * ======================================================================= */
 #include "OptionsCont.h"
 #include "OptionsIO.h"
-#include "OptionsLoader.h"
 #include "OptionsParser.h"
 #include <iostream>
 #include <string>
 
 #ifdef USE_XML_OPTIONS
+#include "OptionsXercesHandler.h"
 #include <utils/xml/XMLConvert.h>
 #include <util/PlatformUtils.hpp>
 #include <sax2/SAX2XMLReader.hpp>
@@ -89,7 +89,7 @@ OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
     }
     SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
     string file = into->getString(configurationName);
-    OptionsLoader handler(into, file);
+    OptionsXercesHandler handler(into, file);
     parser->setContentHandler(&handler);
     parser->setErrorHandler(&handler);
     try {
@@ -111,8 +111,6 @@ OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
 #else
     // consume "into"
     into.contains("foo");
-#endif // USE_XML_OPTIONS
-#ifndef USE_XML_OPTIONS
     return true;
 #endif // USE_XML_OPTIONS
 }

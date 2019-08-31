@@ -1,7 +1,7 @@
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionsLoader
+   module:       OptionsXercesHandler
    purpose:      Handler for reading options from a configuration file
    begin:        03.03.2004
    copyright:    (C) Daniel Krajzewicz
@@ -40,7 +40,7 @@
 #include <iostream>
 #include <string>
 #include <utils/exceptions/InvalidArgument.h>
-#include "OptionsLoader.h"
+#include "OptionsXercesHandler.h"
 #include "OptionsCont.h"
 
 /* -------------------------------------------------------------------------
@@ -63,24 +63,23 @@ using namespace XERCES_CPP_NAMESPACE;
 /* =========================================================================
  * method definitions
  * ======================================================================= */
-OptionsLoader::OptionsLoader(OptionsCont *options,
-                             const std::string &file)
-    : myOptions(options), myHadError(false), myFileName(file) {
+OptionsXercesHandler::OptionsXercesHandler(OptionsCont *options,
+    const std::string &file) : myOptions(options), myHadError(false), myFileName(file) {
 }
 
 
-OptionsLoader::~OptionsLoader() {
+OptionsXercesHandler::~OptionsXercesHandler() {
 }
 
 
 void
-OptionsLoader::startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs) {
+OptionsXercesHandler::startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs) {
     myCurrentOptionName = XMLConvert::_2str(localname);
 }
 
 
 void
-OptionsLoader::characters(const XMLCh* const chars, const unsigned int length) {
+OptionsXercesHandler::characters(const XMLCh* const chars, const unsigned int length) {
     if(myOptions->contains(myCurrentOptionName)) {
         try {
             myOptions->setPathAware(myCurrentOptionName, XMLConvert::_2str(chars), myFileName);
@@ -95,27 +94,27 @@ OptionsLoader::characters(const XMLCh* const chars, const unsigned int length) {
 
 
 void
-OptionsLoader::warning(const SAXParseException& exception) {
+OptionsXercesHandler::warning(const SAXParseException& exception) {
     XMLConvert::reportWarning(exception, myFileName);
 }
 
 
 void
-OptionsLoader::error(const SAXParseException& exception) {
+OptionsXercesHandler::error(const SAXParseException& exception) {
     XMLConvert::reportError(exception, myFileName);
     myHadError = true;
 }
 
 
 void
-OptionsLoader::fatalError(const SAXParseException& exception) {
+OptionsXercesHandler::fatalError(const SAXParseException& exception) {
     XMLConvert::reportFatal(exception, myFileName);
     myHadError = true;
 }
 
 
 bool
-OptionsLoader::errorOccured() {
+OptionsXercesHandler::errorOccured() {
     return myHadError;
 }
 

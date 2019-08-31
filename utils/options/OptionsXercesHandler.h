@@ -1,9 +1,9 @@
-#ifndef OptionsLoader_h
-#define OptionsLoader_h
+#ifndef OptionsXercesHandler_h
+#define OptionsXercesHandler_h
 /* *************************************************************************
    project:      multipurpose library
    subproject:   options library
-   module:       OptionsLoader
+   module:       OptionsXercesHandler
    purpose:      Handler for reading options from a configuration file
    begin:        03.03.2004
    copyright:    (C) Daniel Krajzewicz
@@ -56,24 +56,23 @@ class OptionsCont;
  * class definitions
  * ======================================================================= */
 /**
- * @class OptionsLoader
+ * @class OptionsXercesHandler
  * @brief Handler for reading options from a configuration file.
  *
  * To enable loading of XML-configurations, USE_XMLmyOptions must be defined.
- *  In this case, OptionsLoader is used as a handler for the xerces-library.
+ *  In this case, OptionsXercesHandler is used as a handler for the xerces-library.
  */
-class OptionsLoader :
-    public XERCES_CPP_NAMESPACE_QUALIFIER DefaultHandler {
+class OptionsXercesHandler : public XERCES_CPP_NAMESPACE_QUALIFIER DefaultHandler {
 public:
     /** @brief Constructor
 	 * @param[in] options The options to fill
 	 * @param[in] file The configuration file to load
      */
-    OptionsLoader(OptionsCont *options, const std::string &file);
+    OptionsXercesHandler(OptionsCont *options, const std::string &file);
 
 
     /// @brief Destructor
-    ~OptionsLoader();
+    ~OptionsXercesHandler();
 
 
 
