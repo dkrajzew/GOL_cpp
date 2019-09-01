@@ -1,4 +1,11 @@
 binary:$TESTER_BINARY
 
 copy_test_path:options.txt
+copy_test_path:config.xml
+
+[run_dependent_text]
+stdout:{INTERNAL writedir}{REPLACE <writedir>}
+stderr:{INTERNAL writedir}{REPLACE <writedir>}
+output:{INTERNAL writedir}{REPLACE <writedir>}
+errors:{INTERNAL writedir}{REPLACE <writedir>}
 

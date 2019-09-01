@@ -64,6 +64,7 @@ using namespace std;
  * static member definitions
  * ======================================================================= */
 OptionsCont myOptions;
+std::string configOptionName;
 
 
 
@@ -131,6 +132,10 @@ loadDefinition() {
             // ... is it the tail/head help stuff?
             if(type=="HELPHEADTAIL") {
                 myOptions.setHelpHeadAndTail(synonymes[0], synonymes[1]);
+                continue;
+            }
+            if(type=="CONFIG") {
+                configOptionName = synonymes[0];
                 continue;
             }
             // ... is it a named section begin?
@@ -203,7 +208,7 @@ main(int argc, char *argv[]) {
     // parse options
     if(ret==STAT_OK) {
         try {
-            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, "")) {
+            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, configOptionName)) {
                 ret = STAT_READ_COMMENT;
             }
             myOptions.printHelp(std::cout);

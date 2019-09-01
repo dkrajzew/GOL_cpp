@@ -86,7 +86,7 @@ public:
 
 
     /** @brief Called if characters shall be processed */
-    void characters(const XMLCh* const chars, const unsigned int length);
+    void characters(const XMLCh* const chars, const XMLSize_t length);
     //}
 
 

@@ -1,0 +1,10 @@
+SECTION;Words
+STRING;n;name;+World;!Defines how to call the user.
+STRING;g;greet;+Hello;!Defines how to greet.
+STRING;c;config;!Loads the named configuration.
+SECTION;Processing
+INT;r;repeat;!Sets an optional number of repetitions.
+SECTION;Meta
+BOOL;version;!Prints the version.
+BOOL;?;help;!Prints this help screen.
+CONFIG;config
