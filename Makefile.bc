@@ -9,7 +9,6 @@ TOPDIR    = .
 # Uncomment the following two lines for release builds...
 CXXFLAGS  = -P -5 -a1 -O1 -Ov -w-inl 
 DEFINES   = -DNDEBUG -D_WINDOWS -DWIN32 -D__BORLANDC__=0x550
-SHAREWARE_DEFINES   = $(DEFINES) -DSHAREWARE 
 
 .SUFFIXES: .cpp .c
 LINKFLAGS = 
