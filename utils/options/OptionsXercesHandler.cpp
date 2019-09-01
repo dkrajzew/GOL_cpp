@@ -16,7 +16,7 @@
 /* =========================================================================
 * compile only if XML is supported
 * ======================================================================= */
-#ifdef USE_XML_OPTIONS
+#ifdef USE_XERCES_XML
 
 
 
@@ -36,10 +36,8 @@
  * ======================================================================= */
 #include <sax2/Attributes.hpp>
 #include <sax2/DefaultHandler.hpp>
-#include <utils/xml/XMLConvert.h>
 #include <iostream>
 #include <string>
-#include <utils/exceptions/InvalidArgument.h>
 #include "OptionsXercesHandler.h"
 #include "OptionsCont.h"
 
@@ -63,8 +61,8 @@ using namespace XERCES_CPP_NAMESPACE;
 /* =========================================================================
  * method definitions
  * ======================================================================= */
-OptionsXercesHandler::OptionsXercesHandler(OptionsCont *options,
-    const std::string &file) : myOptions(options), myHadError(false), myFileName(file) {
+OptionsXercesHandler::OptionsXercesHandler(OptionsCont &options, const std::string &file) 
+    : myOptions(options), myHadError(false), myFileName(file) {
 }
 
 
@@ -74,20 +72,14 @@ OptionsXercesHandler::~OptionsXercesHandler() {
 
 void
 OptionsXercesHandler::startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs) {
-    myCurrentOptionName = XMLConvert::_2str(localname);
+    myCurrentOptionName = convert(localname);
 }
 
 
 void
 OptionsXercesHandler::characters(const XMLCh* const chars, const unsigned int length) {
-    if(myOptions->contains(myCurrentOptionName)) {
-        try {
-            myOptions->setPathAware(myCurrentOptionName, XMLConvert::_2str(chars), myFileName);
-        } catch(InvalidArgument &e) {
-            cerr << "Error: " << e.msg() << endl;
-            myHadError = true;
-        } catch(...) {
-        }
+    if(myOptions.contains(myCurrentOptionName)) {
+        myOptions.set(myCurrentOptionName, convert(chars));
     }
     myCurrentOptionName = "";
 }
@@ -95,20 +87,20 @@ OptionsXercesHandler::characters(const XMLCh* const chars, const unsigned int le
 
 void
 OptionsXercesHandler::warning(const SAXParseException& exception) {
-    XMLConvert::reportWarning(exception, myFileName);
+    std::cerr << "Warning:" << std::endl << convert(exception.getMessage()) << std::endl << " in " << myFileName << '.' << std::endl;
 }
 
 
 void
 OptionsXercesHandler::error(const SAXParseException& exception) {
-    XMLConvert::reportError(exception, myFileName);
+    std::cerr << "Error:" << std::endl << convert(exception.getMessage()) << std::endl << " in " << myFileName << '.' << std::endl;
     myHadError = true;
 }
 
 
 void
 OptionsXercesHandler::fatalError(const SAXParseException& exception) {
-    XMLConvert::reportFatal(exception, myFileName);
+    std::cerr << "Error:" << std::endl << convert(exception.getMessage()) << std::endl << " in " << myFileName << '.' << std::endl;
     myHadError = true;
 }
 
@@ -118,7 +110,17 @@ OptionsXercesHandler::errorOccured() {
     return myHadError;
 }
 
-#endif // USE_XML_OPTIONS
+
+std::string 
+OptionsXercesHandler::convert(const XMLCh * const str) {
+    std::string ret;
+    for (size_t i=0; str[i]!=0; ++i) {
+        ret += (char) str[i];
+    }
+    return ret;
+}
+
+#endif // USE_XERCES_XML
 
 
 

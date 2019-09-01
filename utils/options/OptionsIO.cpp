@@ -33,14 +33,13 @@
 #include <iostream>
 #include <string>
 
-#ifdef USE_XML_OPTIONS
+#ifdef USE_XERCES_XML
 #include "OptionsXercesHandler.h"
-#include <utils/xml/XMLConvert.h>
 #include <util/PlatformUtils.hpp>
 #include <sax2/SAX2XMLReader.hpp>
 #include <sax2/XMLReaderFactory.hpp>
 using namespace XERCES_CPP_NAMESPACE;
-#endif // USE_XML_OPTIONS
+#endif // USE_XERCES_XML
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -79,31 +78,29 @@ OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
     if(configurationName.length()==0) {
         return true;
     }
-#ifdef USE_XML_OPTIONS
+#ifdef USE_XERCES_XML
     try {
         XMLPlatformUtils::Initialize();
     } catch(const XMLException& toCatch) {
-        cerr << "Error during initialization! Message:\n"
-             << XMLConvert::_2str(toCatch.getMessage()) << endl;
+        cerr << "Error during initialization! Message:" << std::endl
+             << OptionsXercesHandler::convert(toCatch.getMessage()) << endl;
         return false;
     }
     SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
-    string file = into->getString(configurationName);
+    string file = into.getString(configurationName);
     OptionsXercesHandler handler(into, file);
     parser->setContentHandler(&handler);
     parser->setErrorHandler(&handler);
     try {
         parser->parse(file.c_str());
     } catch(const XMLException& e) {
-        cerr << endl << "Error during parsing: '" << file << endl
-             << "Exception message is:" << endl
-             << XMLConvert::_2str(e.getMessage()) << "\n" << endl;
+        std::cerr << std::endl << "Error during parsing: '" << file << std::endl
+             << "Exception message is:" << std::endl
+             << OptionsXercesHandler::convert(e.getMessage()) << "\n" << std::endl;
         XMLPlatformUtils::Terminate();
         return false;
-    } catch(InvalidMethod &) {
-        cerr << "Error: You have to set your enviroment variable." << endl; // !v2!
     } catch(...) {
-        cerr << endl << "Error: Unexpected exception during parsing: '" << file << endl;
+        std::cerr << std::endl << "Error: Unexpected exception during parsing: '" << file << std::endl;
         XMLPlatformUtils::Terminate();
         return false;
     }
@@ -112,7 +109,7 @@ OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
     // consume "into"
     into.contains("foo");
     return true;
-#endif // USE_XML_OPTIONS
+#endif // USE_XERCES_XML
 }
 
 

@@ -318,7 +318,6 @@ OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, si
         os << myHelpHead << std::endl;
     }
     std::string lastSection;
-    compareByLength c;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
         // check whether a new section starts
         std::string optSection = myOption2Section.find(*i)->second;

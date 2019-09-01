@@ -54,7 +54,7 @@ class OptionsCont;
  * @class OptionsIO
  * @brief Static helper methods for parsing and loading of options.
  *
- * To enable loading of XML-configurations, USE_XML_OPTIONS must be defined.
+ * To enable loading of XML-configurations, USE_XERCES_XML must be defined.
  *  In this case, the configuration is loaded using the xerces-parser.
  */
 class OptionsIO {

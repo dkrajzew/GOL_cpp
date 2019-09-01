@@ -8,6 +8,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tester", "tester\tester.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "y_libutils_options", "y_libutils_options\y_libutils_options.vcxproj", "{A7C8F458-1839-459F-8735-B4EAB67FEE78}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "y_libutils_options_xerces", "y_libutils_options_xerces\y_libutils_options_xerces.vcxproj", "{7F091D71-57AE-48D4-8222-9EDD77C14ABE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -48,6 +50,18 @@ Global
 		{A7C8F458-1839-459F-8735-B4EAB67FEE78}.Release|Win32.Build.0 = Release|Win32
 		{A7C8F458-1839-459F-8735-B4EAB67FEE78}.Release|x64.ActiveCfg = Release|x64
 		{A7C8F458-1839-459F-8735-B4EAB67FEE78}.Release|x64.Build.0 = Release|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Debug|Win32.Build.0 = Debug|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Debug|x64.ActiveCfg = Debug|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Debug|x64.Build.0 = Debug|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Fastbuild|Win32.ActiveCfg = Release|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Fastbuild|Win32.Build.0 = Release|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Fastbuild|x64.ActiveCfg = Release|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Fastbuild|x64.Build.0 = Release|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Release|Win32.ActiveCfg = Release|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Release|Win32.Build.0 = Release|Win32
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Release|x64.ActiveCfg = Release|x64
+		{7F091D71-57AE-48D4-8222-9EDD77C14ABE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,7 +18,7 @@
 /* =========================================================================
  * compile only if XML is supported
  * ======================================================================= */
-#ifdef USE_XML_OPTIONS
+#ifdef USE_XERCES_XML
 
 
 
@@ -68,7 +68,7 @@ public:
 	 * @param[in] options The options to fill
 	 * @param[in] file The configuration file to load
      */
-    OptionsXercesHandler(OptionsCont *options, const std::string &file);
+    OptionsXercesHandler(OptionsCont &options, const std::string &file);
 
 
     /// @brief Destructor
@@ -112,9 +112,18 @@ public:
     bool errorOccured();
 
 
+    /** @brief Converts the given XMLCh* string to standard string
+     *
+     * Nope, no encoding, just plain type conversion.
+     * @param[in] str The string to convert
+     * @return The converted string
+     */
+    static std::string convert(const XMLCh * const str);
+
+
 private:
     /// @brief The options to fill
-    OptionsCont *myOptions;
+    OptionsCont &myOptions;
 
     /// @brief The name of the current option to set
     std::string myCurrentOptionName;
@@ -128,7 +137,7 @@ private:
 };
 
 
-#endif // USE_XML_OPTIONS
+#endif // USE_XERCES_XML
 
 
 // *************************************************************************
