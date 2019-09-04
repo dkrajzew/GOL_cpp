@@ -1,14 +1,14 @@
  Words
-   -n, --name      Defines how to call the user.
-   -g, --greet     Defines how to greet.
+  -n, --name    Defines how to call the user.
+  -g, --greet   Defines how to greet.
  Processing
-   -r, --repeat    Sets an optional number of repetitions.
+  -r, --repeat  Sets an optional number of repetitions.
  Meta
-   --version       Prints the version.
-   -?, --help      Prints this help screen.
+  --version     Prints the version.
+  -?, --help    Prints this help screen.
 -------------------------------------------------------------------------------
-? (?, help): false (default)
-g (g, greet): Hello (default)
-n (n, name): World (default)
-version (version): false (default)
+? (help): false (default)
+g (greet): Hello (default)
+n (name): World (default)
+version: false (default)
 -------------------------------------------------------------------------------

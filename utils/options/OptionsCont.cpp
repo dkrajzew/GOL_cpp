@@ -121,9 +121,9 @@ OptionsCont::addSynonyme(const std::string &name1, const std::string &name2) {
 
 
 void
-OptionsCont::setDescription(const std::string &name, const std::string &desc) {
+OptionsCont::setDescription(const std::string &name, const std::string &desc, const std::string &semType) {
     Option *o = getOption(name);
-    o->setDescription(desc);
+    o->setDescription(desc, semType);
 }
 
 
@@ -262,8 +262,14 @@ OptionsCont::contains(const string &name) const {
 
 std::vector<std::string>
 OptionsCont::getSynonymes(const std::string &name) const {
-    Option *o = getOption(name);
-    return getSynonymes(o);
+    Option *option = getOption(name);
+    vector<string> ret;
+    for(std::map<std::string, Option*>::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
+        if((*i).second==option && name!=(*i).first) {
+            ret.push_back((*i).first);
+        }
+    }
+    return ret;
 }
 
 
@@ -298,12 +304,12 @@ OptionsCont::convert(char abbr) {
 
 
 void
-OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, size_t sectionIndent) const {
+OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, size_t divider, size_t sectionIndent) const {
     // compute needed width
-    size_t maxWidth = 0;
+    size_t optMaxWidth = 0;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
         std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
-        maxWidth = maxWidth<optNames.length() ? optNames.length() : maxWidth;
+        optMaxWidth = optMaxWidth<optNames.length() ? optNames.length() : optMaxWidth;
     }
     // build the indent
     std::string optionIndentSting, sectionIndentSting;
@@ -333,21 +339,23 @@ OptionsCont::printHelp(std::ostream &os, size_t optionIndent, size_t divider, si
         // write the description
         size_t beg = 0;
         std::string desc = (*i)->getDescription();
-        size_t offset = divider+maxWidth-owidth;
+        size_t offset = divider+optMaxWidth-owidth;
+        size_t startCol = divider+optMaxWidth+optionIndent;
         while(beg<desc.length()) {
             for(size_t j=0; j<offset; ++j) {
                 os << " ";
             }
-            if(80-offset>=desc.length()-beg) {
+            if(maxWidth-startCol>=desc.length()-beg) {
                 os << desc.substr(beg);
                 beg = desc.length();
             } else {
-                size_t end = desc.rfind(' ', beg+80-offset);
+                size_t end = desc.rfind(' ', beg+maxWidth-startCol);
                 os << desc.substr(beg, end);
-                end = desc.length();
+                beg = end;
                 os << std::endl;
             }
-            offset = divider; // could "running description indent"
+            startCol = divider+optMaxWidth+optionIndent+1; // could "running description indent"
+            offset = startCol;
         }
         os << std::endl;
     }
@@ -366,14 +374,16 @@ operator<<(std::ostream &os, const OptionsCont &oc) {
             Option *o = (*i).second;
             if(o->isSet()) {
                 vector<string> synonymes = oc.getSynonymes((*i).first);
+                known.push_back((*i).first);
                 os << (*i).first;
                 if(synonymes.size()>0) {
                     os << " (";
                     for(j=synonymes.begin(); j!=synonymes.end();) {
                         known.push_back(*j);
                         os << *j++;
-                        if(j!=synonymes.end())
+                        if(j!=synonymes.end()) {
                             os << ", ";
+                        }
                     }
                     os << ")";
                 }
@@ -405,6 +415,10 @@ OptionsCont::getHelpFormattedSynonymes(const Option * const option, size_t optio
         if(j!=synonymes.end()-1) {
             oss << ", ";
         }
+    }
+    std::string semType = option->getSemanticType();
+    if(semType!="") {
+        oss << " " << semType;
     }
     return oss.str();
 }

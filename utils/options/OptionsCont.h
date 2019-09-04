@@ -102,8 +102,9 @@ public:
      * The description is what appears in the help menu
 	 * @param[in] name The name of the option
 	 * @param[in] desc The description of the option
+     * @param[in] semType The type of the value
 	 */
-    void setDescription(const std::string &name, const std::string &desc);
+    void setDescription(const std::string &name, const std::string &desc, const std::string &semType="");
 
 
     /** @brief Starts a new section
@@ -207,11 +208,12 @@ public:
      * First, the help header is printed. Then, the method iterates over the
      *  known options. In the end, the help tail is printed.
      * @param[in] os The stream to write to
+     * @param[in] maxWidth The maximum width of a line
      * @param[in] optionIndent The indent to use before writing an option
      * @param[in] divider The space between the option name and the description
      * @param[in] sectionIndent The indent to use before writing a section name
 	 */
-    void printHelp(std::ostream &os, size_t optionIndent=3, size_t divider=4, size_t sectionIndent=1) const;
+    void printHelp(std::ostream &os, size_t maxWidth=80, size_t optionIndent=2, size_t divider=2, size_t sectionIndent=1) const;
     /// @}
 
 

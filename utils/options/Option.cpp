@@ -110,14 +110,21 @@ Option::setSet() {
 
 
 void
-Option::setDescription(const std::string &desc) {
+Option::setDescription(const std::string &desc, const std::string &semType) {
     myDescription = desc;
+    mySemanticType = semType;
 }
 
 
 const std::string &
 Option::getDescription() const {
     return myDescription;
+}
+
+
+const std::string &
+Option::getSemanticType() const {
+    return mySemanticType;
 }
 
 

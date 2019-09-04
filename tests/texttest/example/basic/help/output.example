@@ -1,7 +1,7 @@
 Usage: example [option]+
 
 Options:
-   -n, --name      Defines how to call the user.
-   -g, --greet     Defines how to greet.
-   -r, --repeat    Sets an optional number of repetitions.
-   -?, --help      Prints this help screen.
+  -n, --name    Defines how to call the user.
+  -g, --greet   Defines how to greet.
+  -r, --repeat  Sets an optional number of repetitions.
+  -?, --help    Prints this help screen.

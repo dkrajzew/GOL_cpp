@@ -113,14 +113,21 @@ public:
     /** @brief Adds a description (what appears in the help screen) to the option
      *
      * @param[in] desc The description to set
+     * @param[in] semType The type of the value
 	 */
-    void setDescription(const std::string &desc);
+    void setDescription(const std::string &desc, const std::string &semType);
 
 
     /** @brief Retuns the option's description
      * @return The option's description
 	 */
     const std::string &getDescription() const;
+
+
+    /** @brief Retuns the option's semantic type
+     * @return The option's semantic type
+	 */
+    const std::string &getSemanticType() const;
 
 
     /** @brief Returns the value (if set) as a string
@@ -180,6 +187,9 @@ private:
 
     /// @brief The description (what appears in the help screen) of the option
     std::string myDescription;
+
+    /// @brief The semantic type of the option
+    std::string mySemanticType;
 
 
 };
