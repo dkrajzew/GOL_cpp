@@ -1,3 +1,17 @@
+/** ************************************************************************
+   @project      options library
+   @since		 26.06.2019
+   @copyright    (c) Daniel Krajzewicz 2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @brief        The tester application is just for internal testing purposes. 
+   It reads a definitions file called "options.txt" which includes 
+   definitions of options and other things to set up the options container. 
+   Then the application performs the things defined by the 
+   http://texttest.sourceforge.net/ test system.
+   *********************************************************************** */
+
 /* *************************************************************************
    project:      PaletteConverter
    module:       paletteconverter_main.cpp
@@ -81,19 +95,6 @@ enum ReturnCodes {
 
 
 
-void
-printAppVersion() {
-    cout << APPNAME << " " << APPVERSION << endl;
-}
-
-
-void
-printCopyrightAndContact() {
-    cout << " (c) Daniel Krajzewicz" << endl;
-    cout << "  http://www.krajzewicz.de/" << endl << endl;
-}
-
-
 ReturnCodes
 loadDefinition() {
     ifstream defs("options.txt");
@@ -175,7 +176,6 @@ loadDefinition() {
                 if(defaultValue.length()==0) {
                     option = new Option_FileName();
                 } else {
-                    int v = atoi(defaultValue.c_str());
                     option = new Option_FileName(defaultValue);
                 }
             }

@@ -1,18 +1,12 @@
 #ifndef OptionsCont_h
 #define OptionsCont_h
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       OptionsCont
-   purpose:      Container for options
-   begin:        03.03.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================
@@ -218,6 +212,9 @@ public:
 
 
 
+    /// @brief (Re-)Setting values
+    /// @{
+
     /** @brief Sets the given value to the given option
      * @param[in] name The name of the option to set
 	 * @param[in] value The value to set
@@ -234,10 +231,14 @@ public:
 
     /// @brief Remarks all options as unset
     void remarkUnset();
+    /// @}
 
 
 
 private:
+    /// @brief Private helper options
+    /// @{
+
     /** @brief Returns the option; throws an exception when not existing
 	 * @param[in] name The name of the option
 	 * @return The option if known
@@ -260,7 +261,7 @@ private:
     std::string convert(char abbr);
 
 
-    /** @brief A string-by-length comperator
+    /** @brief A string-by-length comparator
      */
     struct compareByLength {
         bool operator()(const std::string& first, const std::string& second) {
@@ -273,11 +274,10 @@ private:
      *
      * The synomymes are sorted by length.
      * @param[in] option The option to get the synonymes help string for
-     * @param[in] optionIndent The indentation of options
-     * @param[in] divider The space between the options and the help string
      * @return The options as a help-formatted string
      */
-    std::string getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const;
+    std::string getHelpFormattedSynonymes(const Option * const option) const;
+    /// @}
 
 
 
@@ -291,7 +291,7 @@ private:
     /// @brief The sections
     std::vector<std::string> mySections;
 
-    /// @brief The sections
+    /// @brief The option's assignment to sections
     std::map<Option*, std::string> myOption2Section;
 
     /// @brief THe last section added

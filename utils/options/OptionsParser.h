@@ -1,19 +1,12 @@
 #ifndef OptionsParser_h
 #define OptionsParser_h
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       OptionsParser
-   purpose:      Static helpers for parsing options from command line
-   begin:        03.03.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
-   @todo catch InvalidArguments 
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================

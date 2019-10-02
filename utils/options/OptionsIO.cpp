@@ -1,16 +1,10 @@
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       OptionsIO
-   purpose:      Static helper methods for parsing and loading of options
-   begin:        03.03.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================
@@ -62,11 +56,11 @@ using namespace std;
  * ======================================================================= */
 bool
 OptionsIO::parseAndLoad(OptionsCont &into, int argc, char **argv,
-                        const std::string &configurationName,
+                        const std::string &configOptionName,
                         bool , bool ) {
     bool ok = OptionsParser::parse(into, argc, argv);
     if(ok) into.remarkUnset();
-    if(ok) ok = load(into, configurationName);
+    if(ok) ok = load(into, configOptionName);
     if(ok) into.remarkUnset();
     if(ok) ok = OptionsParser::parse(into, argc, argv);
     return ok;
@@ -74,8 +68,8 @@ OptionsIO::parseAndLoad(OptionsCont &into, int argc, char **argv,
 
 
 bool
-OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
-    if(configurationName.length()==0) {
+OptionsIO::load(OptionsCont &into, const std::string &configOptionName) {
+    if(configOptionName.length()==0) {
         return true;
     }
 #ifdef USE_XERCES_XML
@@ -87,7 +81,7 @@ OptionsIO::load(OptionsCont &into, const std::string &configurationName) {
         return false;
     }
     SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
-    string file = into.getString(configurationName);
+    string file = into.getString(configOptionName);
     OptionsXercesHandler handler(into, file);
     parser->setContentHandler(&handler);
     parser->setErrorHandler(&handler);

@@ -1,17 +1,10 @@
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       OptionsParser
-   purpose:      Static helpers for parsing options from command line
-   begin:        21.02.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
-   @todo catch InvalidArguments
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================
@@ -146,7 +139,7 @@ OptionsParser::parseAbbreviation(OptionsCont &into, char **args, int pos, int ar
     int tokens = 1;
     // otherwise (one needed a parameter)
     string param;
-    if(options[i]=='=') {
+    if(i<options.length() && options[i]=='=') {
         // maybe the parameter is within the string
         param = options.substr(i+1);
     }

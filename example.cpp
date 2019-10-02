@@ -1,15 +1,19 @@
-/* *************************************************************************
-   project:      Greyrat's Options Library
-   module:       example.cpp
-   purpose:      The main module
-   begin:        26.06.2019
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
+/** ************************************************************************
+   @project      options library
+   @since		 26.06.2019
+   @copyright    (c) Daniel Krajzewicz 2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @brief        A very basic example for using the options.
+   It's basically a "Hello World"-application
+   that allows you to give a name and a greet on the command line. 
+   The default for the name is "World" by default, but may be defined using 
+   the option --name <NAME>, or -n <NAME> for short. The default for the 
+   greet is "Hello" by default, but may be defined using the option 
+   --greet <GREET>, or -g <GREET> for short. Additionally, you may 
+   optionally change the number of times "<GREET> <NAME>!" is printed using 
+   the option --repeat (or -r for short).
    *********************************************************************** */
 
 /* =========================================================================

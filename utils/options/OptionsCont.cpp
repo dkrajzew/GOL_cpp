@@ -1,16 +1,10 @@
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       OptionsCont
-   purpose:      Container for options
-   begin:        03.03.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================
@@ -263,13 +257,7 @@ OptionsCont::contains(const string &name) const {
 std::vector<std::string>
 OptionsCont::getSynonymes(const std::string &name) const {
     Option *option = getOption(name);
-    vector<string> ret;
-    for(std::map<std::string, Option*>::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
-        if((*i).second==option && name!=(*i).first) {
-            ret.push_back((*i).first);
-        }
-    }
-    return ret;
+    return getSynonymes(option);
 }
 
 
@@ -308,7 +296,7 @@ OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, s
     // compute needed width
     size_t optMaxWidth = 0;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
-        std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
+        std::string optNames = getHelpFormattedSynonymes(*i);
         optMaxWidth = optMaxWidth<optNames.length() ? optNames.length() : optMaxWidth;
     }
     // build the indent
@@ -332,7 +320,7 @@ OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, s
             os << sectionIndentSting << lastSection << std::endl;
         }
         // write the option
-        std::string optNames = getHelpFormattedSynonymes(*i, optionIndent, divider);
+        std::string optNames = getHelpFormattedSynonymes(*i);
         // write the divider
         os << optionIndentSting << optNames;
         size_t owidth = optNames.length();
@@ -364,42 +352,47 @@ OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, s
     }
 }
 
+
 std::ostream &
 operator<<(std::ostream &os, const OptionsCont &oc) {
     vector<string> known;
     known.reserve(oc.myOptionsMap.size());
     for(std::map<std::string, Option*>::const_iterator i=oc.myOptionsMap.begin(); i!=oc.myOptionsMap.end(); i++) {
         vector<string>::iterator j=find(known.begin(), known.end(), (*i).first);
-        if(j==known.end()) {
-            Option *o = (*i).second;
-            if(o->isSet()) {
-                vector<string> synonymes = oc.getSynonymes((*i).first);
-                known.push_back((*i).first);
-                os << (*i).first;
-                if(synonymes.size()>0) {
-                    os << " (";
-                    for(j=synonymes.begin(); j!=synonymes.end();) {
-                        known.push_back(*j);
-                        os << *j++;
-                        if(j!=synonymes.end()) {
-                            os << ", ";
-                        }
-                    }
-                    os << ")";
-                }
-                os << ": " << o->getValueAsString();
-                if(o->isDefault()) {
-                    os << " (default)";
-                }
-                os << endl;
-            }
+        if(j!=known.end()) {
+            continue;
         }
+        Option *o = (*i).second;
+        if(!o->isSet()) {
+            continue;
+        }
+        vector<string> synonymes = oc.getSynonymes((*i).first);
+        vector<string>::iterator k = synonymes.begin();
+        known.push_back(*k);
+        os << *k;
+        if(synonymes.size()>1) {
+            os << " (";
+            for(++k; k!=synonymes.end();) {
+                known.push_back(*k);
+                os << *k++;
+                if(k!=synonymes.end()) {
+                    os << ", ";
+                }
+            }
+            os << ")";
+        }
+        os << ": " << o->getValueAsString();
+        if(o->isDefault()) {
+            os << " (default)";
+        }
+        os << endl;
     }
     return os;
 }
 
+
 std::string 
-OptionsCont::getHelpFormattedSynonymes(const Option * const option, size_t optionIndent, size_t divider) const {
+OptionsCont::getHelpFormattedSynonymes(const Option * const option) const {
     compareByLength c;
     std::vector<std::string> synonymes = getSynonymes(option);
     std::sort(synonymes.begin(), synonymes.end(), c);

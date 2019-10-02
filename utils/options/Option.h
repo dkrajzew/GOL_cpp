@@ -1,18 +1,12 @@
 #ifndef Option_h
 #define Option_h
-/* *************************************************************************
-   project:      multipurpose library
-   subproject:   options library
-   module:       Option
-   purpose:      Definition of option types
-   begin:		 03.03.2004
-   copyright:    (C) Daniel Krajzewicz
-   email:        daniel@krajzewicz.de
-   *************************************************************************
-   Version:
-   Remarks:
-   *************************************************************************
-   ToDo:
+/** ************************************************************************
+   @project      options library
+   @since		 03.03.2004
+   @copyright    (c) Daniel Krajzewicz 2004-2019
+   @author       Daniel Krajzewicz  
+   @email        daniel@krajzewicz.de
+   @license      Eclipse Public License v2.0 (EPL v2.0) 
    *********************************************************************** */
 
 /* =========================================================================
