@@ -69,7 +69,7 @@ public:
 
 
 private:
-    /** @brief Loads options from a configuration file
+    /** @brief Loads options from an XML configuration file
 	 * @param[in] into The options container to fill
 	 * @param[in] configurationName The path to the configuration to load (XML)
 	 */

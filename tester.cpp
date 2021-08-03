@@ -110,7 +110,7 @@ loadDefinition() {
         } else {
             // ok, it's an option
             // ... parse the line
-            std::vector<std::string> synonymes;
+            std::vector<std::string> synonyms;
             char abbr = '!';
             std::string type, description, defaultValue;
             istringstream f(line);
@@ -127,21 +127,21 @@ loadDefinition() {
                 }  else if(s[0]=='+') {
                     defaultValue = s.substr(1);
                 } else {
-                    synonymes.push_back(s);
+                    synonyms.push_back(s);
                 }
             }
             // ... is it the tail/head help stuff?
             if(type=="HELPHEADTAIL") {
-                myOptions.setHelpHeadAndTail(synonymes[0], synonymes[1]);
+                myOptions.setHelpHeadAndTail(synonyms[0], synonyms[1]);
                 continue;
             }
             if(type=="CONFIG") {
-                configOptionName = synonymes[0];
+                configOptionName = synonyms[0];
                 continue;
             }
             // ... is it a named section begin?
             if(type=="SECTION") {
-                myOptions.beginSection(synonymes[0]);
+                myOptions.beginSection(synonyms[0]);
                 continue;
             }
             // ... build the option, first
@@ -180,16 +180,16 @@ loadDefinition() {
                 }
             }
             // ... add it to the container
-            std::string firstName = synonymes.front();
-            synonymes.erase(synonymes.begin());
+            std::string firstName = synonyms.front();
+            synonyms.erase(synonyms.begin());
             if(abbr!='!') {
                 myOptions.add(firstName, abbr, option);
             } else {
                 myOptions.add(firstName, option);
             }
-            while(!synonymes.empty()) {
-                myOptions.addSynonyme(firstName, synonymes.front());
-                synonymes.erase(synonymes.begin());
+            while(!synonyms.empty()) {
+                myOptions.addSynonym(firstName, synonyms.front());
+                synonyms.erase(synonyms.begin());
             }
             // ... add description if given
             if(description.length()!=0) {

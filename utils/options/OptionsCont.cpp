@@ -77,7 +77,7 @@ OptionsCont::add(const std::string &name, Option *option) {
     if(i!=myOptionsMap.end()) {
         throw std::exception();// ("An option with the name '" + name + "' already exists.");
     }
-    // check whether a synonyme already exists, if not, add the option to option's array
+    // check whether a synonym already exists, if not, add the option to option's array
     std::vector<Option*>::const_iterator j = find(myOptions.begin(), myOptions.end(), option);
     if(j==myOptions.end()) {
         myOptions.push_back(option);
@@ -97,7 +97,7 @@ OptionsCont::add(const std::string &name, char abbr, Option *option) {
 
 
 void
-OptionsCont::addSynonyme(const std::string &name1, const std::string &name2) {
+OptionsCont::addSynonym(const std::string &name1, const std::string &name2) {
     Option *o1 = getOptionSecure(name1);
     Option *o2 = getOptionSecure(name2);
     if(o1==0&&o2==0) {
@@ -255,14 +255,14 @@ OptionsCont::contains(const string &name) const {
 
 
 std::vector<std::string>
-OptionsCont::getSynonymes(const std::string &name) const {
+OptionsCont::getSynonyms(const std::string &name) const {
     Option *option = getOption(name);
-    return getSynonymes(option);
+    return getSynonyms(option);
 }
 
 
 std::vector<std::string>
-OptionsCont::getSynonymes(const Option* const option) const {
+OptionsCont::getSynonyms(const Option* const option) const {
     vector<string> ret;
     for(std::map<std::string, Option*>::const_iterator i=myOptionsMap.begin(); i!=myOptionsMap.end(); i++) {
         if((*i).second==option) {
@@ -296,7 +296,7 @@ OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, s
     // compute needed width
     size_t optMaxWidth = 0;
     for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
-        std::string optNames = getHelpFormattedSynonymes(*i);
+        std::string optNames = getHelpFormattedSynonyms(*i);
         optMaxWidth = optMaxWidth<optNames.length() ? optNames.length() : optMaxWidth;
     }
     // build the indent
@@ -320,7 +320,7 @@ OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, s
             os << sectionIndentSting << lastSection << std::endl;
         }
         // write the option
-        std::string optNames = getHelpFormattedSynonymes(*i);
+        std::string optNames = getHelpFormattedSynonyms(*i);
         // write the divider
         os << optionIndentSting << optNames;
         size_t owidth = optNames.length();
@@ -366,16 +366,16 @@ operator<<(std::ostream &os, const OptionsCont &oc) {
         if(!o->isSet()) {
             continue;
         }
-        vector<string> synonymes = oc.getSynonymes((*i).first);
-        vector<string>::iterator k = synonymes.begin();
+        vector<string> synonyms = oc.getSynonyms((*i).first);
+        vector<string>::iterator k = synonyms.begin();
         known.push_back(*k);
         os << *k;
-        if(synonymes.size()>1) {
+        if(synonyms.size()>1) {
             os << " (";
-            for(++k; k!=synonymes.end();) {
+            for(++k; k!=synonyms.end();) {
                 known.push_back(*k);
                 os << *k++;
-                if(k!=synonymes.end()) {
+                if(k!=synonyms.end()) {
                     os << ", ";
                 }
             }
@@ -392,12 +392,12 @@ operator<<(std::ostream &os, const OptionsCont &oc) {
 
 
 std::string 
-OptionsCont::getHelpFormattedSynonymes(const Option * const option) const {
+OptionsCont::getHelpFormattedSynonyms(const Option * const option) const {
     compareByLength c;
-    std::vector<std::string> synonymes = getSynonymes(option);
-    std::sort(synonymes.begin(), synonymes.end(), c);
+    std::vector<std::string> synonyms = getSynonyms(option);
+    std::sort(synonyms.begin(), synonyms.end(), c);
     std::ostringstream oss;
-    for(std::vector<std::string>::const_iterator j=synonymes.begin(); j!=synonymes.end(); ++j) {
+    for(std::vector<std::string>::const_iterator j=synonyms.begin(); j!=synonyms.end(); ++j) {
         // consider the - / --
         if((*j).length()==1) {
             oss << '-';
@@ -405,7 +405,7 @@ OptionsCont::getHelpFormattedSynonymes(const Option * const option) const {
             oss << "--";
         }
         oss << (*j);
-        if(j!=synonymes.end()-1) {
+        if(j!=synonyms.end()-1) {
             oss << ", ";
         }
     }

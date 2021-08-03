@@ -84,11 +84,11 @@ public:
     void add(const std::string &name, char abbr, Option *option);
 
 
-    /** @brief Registers a known option under the other synonyme
+    /** @brief Registers a known option under the other synonym
 	 * @param[in] name1 The name the option was already known under
-	 * @param[in] name2 The synonyme to register
+	 * @param[in] name2 The synonym to register
 	 */
-    void addSynonyme(const std::string &name1, const std::string &name2);
+    void addSynonym(const std::string &name1, const std::string &name2);
 
 
     /** @brief Sets the description for an already added option
@@ -170,18 +170,18 @@ public:
     bool contains(const std::string &name) const;
 
 
-    /** @brief Returns the list of synonymes to the given option name
+    /** @brief Returns the list of synonyms to the given option name
 	 * @param[in] name The name of the option
 	 * @return List of this option's names
 	 */
-    std::vector<std::string> getSynonymes(const std::string &name) const;
+    std::vector<std::string> getSynonyms(const std::string &name) const;
 
 
     /** @brief Returns the list of names of the given option
 	 * @param[in] option The option to retrieve her names
 	 * @return List of this option's names
 	 */
-    std::vector<std::string> getSynonymes(const Option* const option) const;
+    std::vector<std::string> getSynonyms(const Option* const option) const;
     /// @}
 
 
@@ -273,10 +273,10 @@ private:
     /** @brief Returns the synomymes of an option as a help-formatted string 
      *
      * The synomymes are sorted by length.
-     * @param[in] option The option to get the synonymes help string for
+     * @param[in] option The option to get the synonyms help string for
      * @return The options as a help-formatted string
      */
-    std::string getHelpFormattedSynonymes(const Option * const option) const;
+    std::string getHelpFormattedSynonyms(const Option * const option) const;
     /// @}
 
 
