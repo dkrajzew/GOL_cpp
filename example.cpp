@@ -1,7 +1,7 @@
 /** ************************************************************************
    @project      options library
    @since		 26.06.2019
-   @copyright    (c) Daniel Krajzewicz 2019
+   @copyright    (c) Daniel Krajzewicz 2019-2021
    @author       Daniel Krajzewicz  
    @email        daniel@krajzewicz.de
    @license      Eclipse Public License v2.0 (EPL v2.0) 
