@@ -2,11 +2,10 @@
 #define Option_h
 /** ************************************************************************
    @project      options library
-   @since		 03.03.2004
-   @copyright    (c) Daniel Krajzewicz 2004-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         Option.h
+   @since        03.03.2004
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2004-2021
    *********************************************************************** */
 
 /* =========================================================================
@@ -44,6 +43,7 @@
  * This class is the base class for options. It is not meant being used
  *  directly but only using derived classes, so the constructors are
  *  not public.
+ *
  * Still, the class is not an abstract class. Type-checking for the set
  *  options is done using methods from TypedValue and throwing exceptions
  *  rather than type-checking of the option during runtime.
@@ -142,6 +142,7 @@ protected:
      * @arg myAmSetable to true
      * @arg myAmSet to false
      * @arg myHaveDefaultValue to hasDefault
+     *
      * @param[in] hasDefault Whether a default values has been supplied
      */
     Option(bool hasDefault=false);
@@ -155,6 +156,7 @@ protected:
 
     /** @brief assignment operator
 	 * @param[in] s The option to copy
+     * @return A reference to this instance
 	 */
     Option &operator=(const Option &s);
 
@@ -214,7 +216,8 @@ public:
 
     /** @brief Assignment operator
 	 * @param[in] s The option to copy
-	 */
+     * @return A reference to this instance
+     */
      Option_Integer &operator=(const Option_Integer &s);
 
 
@@ -289,7 +292,8 @@ public:
 
     /** @brief Assignment operator
 	 * @param[in] s The option to copy
-	 */
+     * @return A reference to this instance
+     */
     Option_Bool &operator=(const Option_Bool &s);
 
 
@@ -359,7 +363,8 @@ public:
 
     /** @brief Assignment operator
 	 * @param[in] s The option to copy
-	 */
+     * @return A reference to this instance
+     */
     Option_Double &operator=(const Option_Double &s);
 
 
@@ -437,7 +442,8 @@ public:
 
     /** @brief Assignment operator
 	 * @param[in] s The option to copy
-	 */
+     * @return A reference to this instance
+     */
     Option_String &operator=(const Option_String &s);
 
 
@@ -507,7 +513,8 @@ public:
 
     /** @brief Assignment operator
 	 * @param[in] s The option to copy
-	 */
+     * @return A reference to this instance
+     */
     Option_FileName &operator=(const Option_FileName &s);
 
 

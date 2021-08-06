@@ -2,11 +2,10 @@
 #define OptionsCont_h
 /** ************************************************************************
    @project      options library
-   @since		 03.03.2004
-   @copyright    (c) Daniel Krajzewicz 2004-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         OptionsCont.h
+   @since        03.03.2004
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2004-2021
    *********************************************************************** */
 
 /* =========================================================================
@@ -171,7 +170,8 @@ public:
 
 
     /** @brief Returns whether the named option's value is its default value
-     * @return Whether the named option has the default value
+    * @param[in] name The name of the option to return the information whether it has the default value for
+    * @return Whether the named option has the default value
      */
     bool isDefault(const std::string &name) const;
 
@@ -279,9 +279,15 @@ public:
 
 
 
-    /** @brief A string-by-length comparator
-    */
+    /** @struct compareByLength
+     * @brief A string-by-length comparator (increasing length)
+     */
     struct compareByLength {
+        /** @brief the comparison function
+         * @param[in] first The first item to compare
+         * @param[in] second The second item to compare
+         * @return Whether the first item is shorter than the second one
+         */
         bool operator()(const std::string& first, const std::string& second) {
             return first.size() < second.size();
         }

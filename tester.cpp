@@ -1,11 +1,11 @@
 /** ************************************************************************
    @project      options library
-   @since		 26.06.2019
-   @copyright    (c) Daniel Krajzewicz 2019-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         tester.cpp
+   @since        26.06.2019
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2019-2021
    @brief        The tester application is just for internal testing purposes. 
+
    It reads a definitions file called "options.txt" which includes 
    definitions of options and other things to set up the options container. 
    Then the application performs the things defined by the 

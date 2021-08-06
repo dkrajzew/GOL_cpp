@@ -2,11 +2,10 @@
 #define OptionsIO_h
 /** ************************************************************************
    @project      options library
-   @since		 03.03.2004
-   @copyright    (c) Daniel Krajzewicz 2004-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         OptionsIO.h
+   @since        03.03.2004
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2004-2021
    *********************************************************************** */
 
 /* =========================================================================
@@ -60,6 +59,7 @@ public:
   	 * @param[in] configOptionName The path to the configuration to load (XML)
 	 * @param[in] continueOnError Continues even if an error occures while parsing
   	 * @param[in] acceptUnknown Unknown options do not throw an exception
+     * @return Whether parsing and loading was successful
      * @todo continueOnError is not used
      * @todo acceptUnknown is not used
      */
@@ -86,6 +86,9 @@ public:
     /** @brief Output operator
      * @param[in] os The output container to write
      * @param[in] options The options to print
+     * @param[in] includeSynonyms Whether synonyms shall be printed
+     * @param[in] shortestFirst Whether synonyms shall be printed in increasing length order
+     * @param[in] skipDefault Whether options with default values shall be skipped
      */
     static void printSetOptions(std::ostream &os, const OptionsCont &options, bool includeSynonyms, bool shortestFirst, bool skipDefault);
 

@@ -1,11 +1,11 @@
 /** ************************************************************************
    @project      options library
-   @since		 26.06.2019
-   @copyright    (c) Daniel Krajzewicz 2019-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         example.cpp
+   @since        26.06.2019
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2019-2021
    @brief        A very basic example for using the options.
+
    It's basically a "Hello World"-application
    that allows you to give a name and a greet on the command line. 
    The default for the name is "World" by default, but may be defined using 

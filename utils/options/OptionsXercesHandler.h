@@ -2,11 +2,10 @@
 #define OptionsXercesHandler_h
 /** ************************************************************************
    @project      options library
-   @since		 03.03.2004
-   @copyright    (c) Daniel Krajzewicz 2004-2021
-   @author       Daniel Krajzewicz  
-   @email        daniel@krajzewicz.de
-   @license      Eclipse Public License v2.0 (EPL v2.0) 
+   @file         OptionsXercesHandler.h
+   @since        03.03.2004
+   @author       Daniel Krajzewicz (daniel@krajzewicz.de)
+   @copyright    Eclipse Public License v2.0 (EPL v2.0), (c) Daniel Krajzewicz 2004-2021
    *********************************************************************** */
 
 /* =========================================================================
