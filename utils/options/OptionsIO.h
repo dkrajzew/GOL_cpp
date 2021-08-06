@@ -68,6 +68,21 @@ public:
 		bool acceptUnknown=false);
 
 
+    /** @brief Writes the set options as an XML configuration file
+     * @param[in] configName The name of the file to write the configuration to
+     * @param[in] options The options container that includes the (set/parsed) options to write 
+     */
+    static void writeXMLConfiguration(const std::string &configName, const OptionsCont &options);
+
+
+    /** @brief Writes the a template for a configuration file
+     * @param configName The name of the file to write the template to
+     * @param options The options container to write a template for 
+     * @throws IOException If the file cannot be written
+     */
+    static void writeXMLTemplate(const std::string &configName, const OptionsCont &options);
+
+
     /** @brief Output operator
      * @param[in] os The output container to write
      * @param[in] options The options to print

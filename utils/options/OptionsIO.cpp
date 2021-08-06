@@ -113,6 +113,34 @@ OptionsIO::load(OptionsCont &into, const std::string &configOptionName) {
 }
 
 
+void 
+OptionsIO::writeXMLConfiguration(const std::string &configName, const OptionsCont &options) {
+    std::vector<std::string> optionNames = options.getSortedOptionNames();
+    std::ofstream fdo(configName.c_str());
+    fdo << "<configuration>" << std::endl;
+    for(std::vector<std::string>::const_iterator i=optionNames.begin(); i!=optionNames.end(); ++i) {
+        std::string optionName = *i;
+        if(options.isSet(optionName) && !options.isDefault(optionName)) {
+            fdo << "   <" << optionName << ">" << options.getValueAsString(optionName) << "</" << optionName << std::endl;
+        }
+    }
+    fdo << "</configuration>" << std::endl;
+    fdo.close();
+}
+
+
+void 
+OptionsIO::writeXMLTemplate(const std::string &configName, const OptionsCont &options) {
+    std::vector<std::string> optionNames = options.getSortedOptionNames();
+    std::ofstream fdo(configName.c_str());
+    fdo << "<configuration>" << std::endl;
+    for(std::vector<std::string>::const_iterator i=optionNames.begin(); i!=optionNames.end(); ++i) {
+        std::string optionName = *i;
+        fdo << "   <" << optionName << "></" << optionName << std::endl;
+    }
+    fdo << "</configuration>" << std::endl;
+    fdo.close();
+}
 
 
 void 
