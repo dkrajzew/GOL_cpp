@@ -215,9 +215,9 @@ OptionsCont::set(const std::string &name, const std::string &value) {
 
 void
 OptionsCont::set(const std::string &name, bool value) {
-    Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
+    Option_Bool *o = dynamic_cast<Option_Bool*>(getOption(name));
     if(o==0) {
-        throw std::runtime_error("This is not a boolean option");
+        throw std::runtime_error("Option '" + name + "' is not a boolean option");
     }
     if(value) {
         o->set("true");
@@ -231,7 +231,7 @@ Option *
 OptionsCont::getOption(const string &name) const {
     std::map<std::string, Option*>::const_iterator i = myOptionsMap.find(name);
     if(i==myOptionsMap.end()) {
-        throw std::runtime_error("The option '" + name + "' is not known.");
+        throw std::runtime_error("Option '" + name + "' is not known.");
     }
     return (*i).second;
 }

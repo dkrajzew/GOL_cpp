@@ -153,7 +153,11 @@ OptionsParser::parseAbbreviation(OptionsCont &into, char **args, int pos, int ar
         tokens = 2;
     }
     // ok
-    into.set(usingParameter.front(), param);
+    try {
+        into.set(usingParameter.front(), param);
+    } catch(std::runtime_error &e) {
+        throw std::runtime_error("Could not set option '" + usingParameter.front() + "'; reason: " + e.what());
+    }
     return tokens;
 }
 
@@ -181,7 +185,11 @@ OptionsParser::parseFull(OptionsCont &into,
     // otherwise (parameter needed)
     if(value!="") {
         // ok, value was given within the same token
-        into.set(option, value);
+        try {
+            into.set(option, value);
+        } catch(std::runtime_error &e) {
+            throw std::runtime_error("Could not set option '" + option + "'; reason: " + value);
+        }
         return 1;
     }
     if(pos+1>=argc) {
@@ -189,7 +197,11 @@ OptionsParser::parseFull(OptionsCont &into,
         throw std::runtime_error(string("Parameter '") + option + string("' needs a value."));
     }
     // ok, use the next one
-    into.set(option, string(args[pos+1]));
+    try {
+        into.set(option, string(args[pos+1]));
+    } catch(std::runtime_error &e) {
+        throw std::runtime_error("Could not set option '" + option + "'; reason: " + string(args[pos+1]));
+    }
     return 2;
 }
 
