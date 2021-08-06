@@ -26,7 +26,6 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
-#include <sstream>
 #include "Option.h"
 #include "OptionsCont.h"
 
@@ -139,7 +138,7 @@ OptionsCont::setHelpHeadAndTail(const std::string &head, const std::string &tail
  * ----------------------------------------------------------------------- */
 int
 OptionsCont::getInteger(const std::string &name) const {
-    Option_Integer *o = dynamic_cast<Option_Integer*>(getOptionSecure(name));
+    Option_Integer *o = dynamic_cast<Option_Integer*>(getOption(name));
     if(o==0) {
         throw std::runtime_error("Option '" + name + "' is not an integer option!");
     }
@@ -152,7 +151,7 @@ OptionsCont::getInteger(const std::string &name) const {
 
 bool
 OptionsCont::getBool(const std::string &name) const {
-    Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
+    Option_Bool *o = dynamic_cast<Option_Bool*>(getOption(name));
     if(o==0) {
         throw std::runtime_error("Option '" + name + "' is not a bool option!");
     }
@@ -165,7 +164,7 @@ OptionsCont::getBool(const std::string &name) const {
 
 double
 OptionsCont::getDouble(const std::string &name) const {
-    Option_Double *o = dynamic_cast<Option_Double*>(getOptionSecure(name));
+    Option_Double *o = dynamic_cast<Option_Double*>(getOption(name));
     if(o==0) {
         throw std::runtime_error("Option '" + name + "' is not a double option!");
     }
@@ -178,7 +177,7 @@ OptionsCont::getDouble(const std::string &name) const {
 
 const std::string &
 OptionsCont::getString(const std::string &name) const {
-    Option_String *o = dynamic_cast<Option_String*>(getOptionSecure(name));
+    Option_String *o = dynamic_cast<Option_String*>(getOption(name));
     if(o==0) {
         throw std::runtime_error("Option '" + name + "' is not a string option!");
     }

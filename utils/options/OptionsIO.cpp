@@ -75,6 +75,9 @@ OptionsIO::load(OptionsCont &into, const std::string &configOptionName) {
     if(configOptionName.length()==0) {
         return true;
     }
+    if(!into.isSet(configOptionName)) {
+        return true;
+    }
 #ifdef USE_XERCES_XML
     try {
         XMLPlatformUtils::Initialize();
