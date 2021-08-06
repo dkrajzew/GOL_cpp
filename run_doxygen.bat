@@ -1,1 +1,1 @@
-C:\MehrProgramme\doxygen\doxygen --style=java  --indent=spaces=4 --indent-after-parens --recursive src/*.cpp src/*.h
+C:\MehrProgramme\doxygen\doxygen doxygen.cfg
