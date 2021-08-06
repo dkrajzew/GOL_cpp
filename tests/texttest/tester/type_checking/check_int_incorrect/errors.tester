@@ -1,2 +1,2 @@
-Got std::runtime_error: inconvertible
+Got std::runtime_error: Could not set option 'test'; reason: value is not an int
 Quitting (on error).

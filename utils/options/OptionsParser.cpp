@@ -188,7 +188,7 @@ OptionsParser::parseFull(OptionsCont &into,
         try {
             into.set(option, value);
         } catch(std::runtime_error &e) {
-            throw std::runtime_error("Could not set option '" + option + "'; reason: " + value);
+            throw std::runtime_error("Could not set option '" + option + "'; reason: " + e.what());
         }
         return 1;
     }
@@ -200,7 +200,7 @@ OptionsParser::parseFull(OptionsCont &into,
     try {
         into.set(option, string(args[pos+1]));
     } catch(std::runtime_error &e) {
-        throw std::runtime_error("Could not set option '" + option + "'; reason: " + string(args[pos+1]));
+        throw std::runtime_error("Could not set option '" + option + "'; reason: " + e.what());
     }
     return 2;
 }
