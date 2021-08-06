@@ -107,7 +107,7 @@ main(int argc, char *argv[]) {
         // check for additional (meta) options
         if(myOptions.getBool("help")) {
             // print the help screen
-            myOptions.printHelp(std::cout);
+            OptionsIO::printHelp(std::cout, myOptions);
         } else {
             // do something
             std::string name = myOptions.getString("name");

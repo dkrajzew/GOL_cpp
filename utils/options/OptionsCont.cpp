@@ -189,10 +189,34 @@ OptionsCont::getString(const std::string &name) const {
 }
 
 
+std::string 
+OptionsCont::getValueAsString(const std::string &name) const {
+    Option *o = getOption(name);
+    if(!o->isSet()) {
+        throw std::runtime_error("The option '" + name + "' is not set!");
+    }
+    return o->getValueAsString();
+}
+
+
+std::string 
+OptionsCont::getTypeName(const std::string &name) const {
+    Option *o = getOption(name);
+    return o->getTypeName();
+}
+
+
 bool
 OptionsCont::isSet(const std::string &name) const {
     Option *o = getOption(name);
     return o->isSet();
+}
+
+
+bool
+OptionsCont::isDefault(const std::string &name) const {
+    Option *o = getOption(name);
+    return o->isDefault();
 }
 
 
@@ -254,6 +278,16 @@ OptionsCont::contains(const string &name) const {
 }
 
 
+std::vector<std::string> 
+OptionsCont::getSortedOptionNames() const {
+    std::vector<std::string> ret;
+    for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
+        ret.push_back(getSynonyms(*i).back());
+    }
+    return ret;
+}
+
+    
 std::vector<std::string>
 OptionsCont::getSynonyms(const std::string &name) const {
     Option *option = getOption(name);
@@ -273,6 +307,40 @@ OptionsCont::getSynonyms(const Option* const option) const {
 }
 
 
+
+
+
+const std::string &
+OptionsCont::getSection(const std::string &optionName) const {
+    Option *option = getOption(optionName);
+    return myOption2Section.find(option)->second; 
+}
+
+
+const std::string &
+OptionsCont::getDescription(const std::string &optionName) const {
+    Option *option = getOption(optionName);
+    return option->getDescription(); 
+}
+
+
+const std::string &
+OptionsCont::getHelpHead() const {
+    return myHelpHead; 
+}
+
+
+const std::string &
+OptionsCont::getHelpTail() const {
+    return myHelpTail; 
+}
+
+
+
+
+
+
+
 void
 OptionsCont::remarkUnset() {
     for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
@@ -288,68 +356,6 @@ OptionsCont::convert(char abbr) {
     buf[1] = 0;
     string s = buf;
     return s;
-}
-
-
-void
-OptionsCont::printHelp(std::ostream &os, size_t maxWidth, size_t optionIndent, size_t divider, size_t sectionIndent) const {
-    // compute needed width
-    size_t optMaxWidth = 0;
-    for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
-        std::string optNames = getHelpFormattedSynonyms(*i);
-        optMaxWidth = optMaxWidth<optNames.length() ? optNames.length() : optMaxWidth;
-    }
-    // build the indent
-    std::string optionIndentSting, sectionIndentSting;
-    for(size_t i=0; i<optionIndent; ++i) {
-        optionIndentSting += " ";
-    }
-    for(size_t i=0; i<sectionIndent; ++i) {
-        sectionIndentSting += " ";
-    }
-    // 
-    if(myHelpHead.length()!=0) {
-        os << myHelpHead << std::endl;
-    }
-    std::string lastSection;
-    for(std::vector<Option*>::const_iterator i=myOptions.begin(); i!=myOptions.end(); ++i) {
-        // check whether a new section starts
-        std::string optSection = myOption2Section.find(*i)->second;
-        if(lastSection!=optSection) {
-            lastSection = optSection;
-            os << sectionIndentSting << lastSection << std::endl;
-        }
-        // write the option
-        std::string optNames = getHelpFormattedSynonyms(*i);
-        // write the divider
-        os << optionIndentSting << optNames;
-        size_t owidth = optNames.length();
-        // write the description
-        size_t beg = 0;
-        std::string desc = (*i)->getDescription();
-        size_t offset = divider+optMaxWidth-owidth;
-        size_t startCol = divider+optMaxWidth+optionIndent;
-        while(beg<desc.length()) {
-            for(size_t j=0; j<offset; ++j) {
-                os << " ";
-            }
-            if(maxWidth-startCol>=desc.length()-beg) {
-                os << desc.substr(beg);
-                beg = desc.length();
-            } else {
-                size_t end = desc.rfind(' ', beg+maxWidth-startCol);
-                os << desc.substr(beg, end);
-                beg = end;
-                os << std::endl;
-            }
-            startCol = divider+optMaxWidth+optionIndent+1; // could "running description indent"
-            offset = startCol;
-        }
-        os << std::endl;
-    }
-    if(myHelpTail.length()!=0) {
-        os << myHelpTail << std::endl;
-    }
 }
 
 
@@ -389,34 +395,6 @@ operator<<(std::ostream &os, const OptionsCont &oc) {
     }
     return os;
 }
-
-
-std::string 
-OptionsCont::getHelpFormattedSynonyms(const Option * const option) const {
-    compareByLength c;
-    std::vector<std::string> synonyms = getSynonyms(option);
-    std::sort(synonyms.begin(), synonyms.end(), c);
-    std::ostringstream oss;
-    for(std::vector<std::string>::const_iterator j=synonyms.begin(); j!=synonyms.end(); ++j) {
-        // consider the - / --
-        if((*j).length()==1) {
-            oss << '-';
-        } else {
-            oss << "--";
-        }
-        oss << (*j);
-        if(j!=synonyms.end()-1) {
-            oss << ", ";
-        }
-    }
-    std::string semType = option->getSemanticType();
-    if(semType!="") {
-        oss << " " << semType;
-    }
-    return oss.str();
-}
-
-
 
 
 // *************************************************************************

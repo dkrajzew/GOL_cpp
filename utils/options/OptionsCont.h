@@ -143,10 +143,24 @@ public:
 
 
     /** @brief Returns the string value of the named option
-	 * @param[in] name The name of the option to retrieve the value from
-	 * @return The named option's value
-	 */
+     * @param[in] name The name of the option to retrieve the value from
+     * @return The named option's value
+     */
     const std::string &getString(const std::string &name) const;
+
+
+    /** @brief Returns the value of the named option as a string
+     * @param[in] name The name of the option to retrieve the value from
+     * @return The string representation of the option's value
+     */
+    std::string getValueAsString(const std::string &name) const;
+
+
+    /** @brief Returns the name of the option's type
+     * @param[in] name The name of the option get the type of
+     * @return The type of the option
+     */
+    std::string getTypeName(const std::string &name) const;
 
 
     /** @brief Returns the information whether the option is set
@@ -154,6 +168,12 @@ public:
 	 * @return Whether the option has a value set
 	 */
     bool isSet(const std::string &name) const;
+
+
+    /** @brief Returns whether the named option's value is its default value
+     * @return Whether the named option has the default value
+     */
+    bool isDefault(const std::string &name) const;
 
 
     /** @brief Returns the information whether the option is a boolean option
@@ -168,6 +188,12 @@ public:
 	 * @return Whether the option is known
 	 */
     bool contains(const std::string &name) const;
+
+
+    /** @brief Returns the sorted (as inserted) option names
+     * @return The sorted list of option names
+     */
+    std::vector<std::string> getSortedOptionNames() const;
 
 
     /** @brief Returns the list of synonyms to the given option name
@@ -186,6 +212,37 @@ public:
 
 
 
+    /// @brief Help Texts Retrieval
+    /// @{
+
+    /** @brief Returns the name of the section the option belongs to
+     * @param[in] optionName The name of the option to return the section name for
+     * @return The name of the section the named option belongs to
+     */
+    const std::string &getSection(const std::string &optionName) const;
+
+
+    /** @brief Returns the description of the named option
+     * @param[in] optionName The name of the option to return the description for
+     * @return The description of the option
+     */
+    const std::string &getDescription(const std::string &optionName) const;
+
+
+    /** @brief Returns the help head
+     * @return The help head
+     */
+    const std::string &getHelpHead() const;
+
+
+    /** @brief Returns the help tail
+     * @return The help tail
+     */
+    const std::string &getHelpTail() const;
+    /// @}
+
+
+
     /// @brief Input / Output
     /// @{
 
@@ -195,19 +252,6 @@ public:
      * @return The stream to write to
 	 */
     friend std::ostream &operator<<(std::ostream &os, const OptionsCont &oc);
-
-
-    /** @brief Prints the help screen
-     *
-     * First, the help header is printed. Then, the method iterates over the
-     *  known options. In the end, the help tail is printed.
-     * @param[in] os The stream to write to
-     * @param[in] maxWidth The maximum width of a line
-     * @param[in] optionIndent The indent to use before writing an option
-     * @param[in] divider The space between the option name and the description
-     * @param[in] sectionIndent The indent to use before writing a section name
-	 */
-    void printHelp(std::ostream &os, size_t maxWidth=80, size_t optionIndent=2, size_t divider=2, size_t sectionIndent=1) const;
     /// @}
 
 
@@ -235,6 +279,15 @@ public:
 
 
 
+    /** @brief A string-by-length comparator
+    */
+    struct compareByLength {
+        bool operator()(const std::string& first, const std::string& second) {
+            return first.size() < second.size();
+        }
+    };
+
+
 private:
     /// @brief Private helper options
     /// @{
@@ -259,24 +312,6 @@ private:
 	 * @return The abbreviated name as a string
 	 */
     std::string convert(char abbr);
-
-
-    /** @brief A string-by-length comparator
-     */
-    struct compareByLength {
-        bool operator()(const std::string& first, const std::string& second) {
-            return first.size() < second.size();
-        }
-    };
-
-
-    /** @brief Returns the synomymes of an option as a help-formatted string 
-     *
-     * The synomymes are sorted by length.
-     * @param[in] option The option to get the synonyms help string for
-     * @return The options as a help-formatted string
-     */
-    std::string getHelpFormattedSynonyms(const Option * const option) const;
     /// @}
 
 

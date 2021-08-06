@@ -211,7 +211,7 @@ main(int argc, char *argv[]) {
             if(!OptionsIO::parseAndLoad(myOptions, argc, argv, configOptionName)) {
                 ret = STAT_READ_COMMENT;
             }
-            myOptions.printHelp(std::cout);
+            OptionsIO::printHelp(std::cout, myOptions);
             std::cout << "-------------------------------------------------------------------------------" << std::endl;
             std::cout << myOptions;
             std::cout << "-------------------------------------------------------------------------------" << std::endl;
