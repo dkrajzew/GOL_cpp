@@ -90,8 +90,9 @@ public:
      * @param[in] optionIndent The indent to use before writing an option
      * @param[in] divider The space between the option name and the description
      * @param[in] sectionIndent The indent to use before writing a section name
+     * @param[in] sectionDivider The number of empty lines before a new section starts 
      */
-    static void printHelp(std::ostream &os, const OptionsCont &options, size_t maxWidth=80, size_t optionIndent=2, size_t divider=2, size_t sectionIndent=1);
+    static void printHelp(std::ostream &os, const OptionsCont &options, size_t maxWidth=80, size_t optionIndent=2, size_t divider=2, size_t sectionIndent=1, size_t sectionDivider=1);
 
 
 

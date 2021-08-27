@@ -101,7 +101,7 @@ OptionsIO::printSetOptions(std::ostream &os, const OptionsCont &options, bool in
 
 
 void
-OptionsIO::printHelp(std::ostream &os, const OptionsCont &options, size_t maxWidth, size_t optionIndent, size_t divider, size_t sectionIndent) {
+OptionsIO::printHelp(std::ostream &os, const OptionsCont &options, size_t maxWidth, size_t optionIndent, size_t divider, size_t sectionIndent, size_t sectionDivider) {
     std::vector<std::string> optionNames = options.getSortedOptionNames();
     const std::string &helpHead = options.getHelpHead();
     const std::string &helpTail = options.getHelpTail();
@@ -129,6 +129,11 @@ OptionsIO::printHelp(std::ostream &os, const OptionsCont &options, size_t maxWid
         // check whether a new section starts
         std::string optSection = options.getSection(name);
         if(lastSection!=optSection) {
+            if(lastSection!="") {
+                for(int k=0; k<sectionDivider; ++k) {
+                    os << std::endl;
+                }
+            }
             lastSection = optSection;
             os << sectionIndentSting << lastSection << std::endl;
         }
