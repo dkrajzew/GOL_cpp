@@ -219,7 +219,11 @@ main(int argc, char *argv[]) {
     // parse options
     if(ret==STAT_OK) {
         try {
-            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, *fileIO, configOptionName)) {
+            std::string configFileName;
+            if(configOptionName!="") {
+                configFileName = myOptions.getString(configOptionName);
+            }
+            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, *fileIO, configFileName)) {
                 ret = STAT_READ_COMMENT;
             }
             OptionsIO::printHelp(std::cout, myOptions);

@@ -127,6 +127,11 @@ Option::isFileName() const {
 }
 
 
+bool
+Option::canBeSet() const {
+    return myAmSetable;
+}
+
 
 
 /* -------------------------------------------------------------------------
@@ -510,7 +515,6 @@ std::string
 Option_FileName::getTypeName() {
     return "filename";
 }
-
 
 
 

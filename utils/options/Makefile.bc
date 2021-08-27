@@ -19,7 +19,7 @@ COPY = copy    # on a Unix system change this to cp.
 TARGET = options.lib
 
 # The list of object files to be built and then linked into $(TARGET):
-OBJS = Option.obj OptionCont.obj OptionsFileIO_CSV.obj OptionsIO.obj OptionsLoader.obj OptionsParser.obj
+OBJS = Option.obj OptionCont.obj OptionsFileIO_CSV.obj OptionsIO.obj OptionsLoader.obj OptionsParser.obj OptionsTypedFileIO.obj
 
 # The list of extra libraries needed to compile the source:
 LIBS = 

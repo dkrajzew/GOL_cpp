@@ -54,18 +54,11 @@ public:
     ~OptionsFileIO_CSV();
 
 
-    /** @brief Loads options from a configuration file
-     * @param[in] into The options container to fill
-     * @param[in] configurationName The path to the configuration to load
-     */
-    bool loadConfiguration(OptionsCont &into, const std::string &configurationName);
-
-
     /** @brief Writes the set options as an XML configuration file
      * @param[in] configName The name of the file to write the configuration to
      * @param[in] options The options container that includes the (set/parsed) options to write 
      */
-    void writeXMLConfiguration(const std::string &configName, const OptionsCont &options);
+    bool writeXMLConfiguration(const std::string &configName, const OptionsCont &options);
 
 
     /** @brief Writes the a template for a configuration file
@@ -73,8 +66,16 @@ public:
      * @param options The options container to write a template for 
      * @throws IOException If the file cannot be written
      */
-    void writeXMLTemplate(const std::string &configName, const OptionsCont &options);
+    bool writeXMLTemplate(const std::string &configName, const OptionsCont &options);
 
+
+protected:
+    /** @brief Loads options from a configuration file
+    * @param[in] into The options container to fill
+    * @param[in] configurationName The path to the configuration to load
+    * @return Whether options could be loaded
+    */
+    bool _loadConfiguration(OptionsCont &into, const std::string &configurationName);
 
 };
 

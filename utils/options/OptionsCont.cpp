@@ -112,6 +112,10 @@ OptionsCont::addSynonym(const std::string &name1, const std::string &name2) {
 }
 
 
+
+/* -------------------------------------------------------------------------
+ * Filling Help Information
+ * ----------------------------------------------------------------------- */
 void
 OptionsCont::setDescription(const std::string &name, const std::string &desc, const std::string &semType) {
     Option *o = getOption(name);
@@ -132,8 +136,9 @@ OptionsCont::setHelpHeadAndTail(const std::string &head, const std::string &tail
 }
 
 
+
 /* -------------------------------------------------------------------------
- * Filling Options
+ * Retrieving Option Values
  * ----------------------------------------------------------------------- */
 int
 OptionsCont::getInteger(const std::string &name) const {
@@ -219,33 +224,19 @@ OptionsCont::isDefault(const std::string &name) const {
 
 
 bool
+OptionsCont::canBeSet(const std::string &name) const {
+    Option *o = getOption(name);
+    return o->canBeSet();
+}
+
+
+bool
 OptionsCont::isBool(const std::string &name) const {
     Option_Bool *o = dynamic_cast<Option_Bool*>(getOptionSecure(name));
     if(o==0) {
         return false;
     }
     return true;
-}
-
-
-void
-OptionsCont::set(const std::string &name, const std::string &value) {
-    Option *o = getOption(name);
-    o->set(value);
-}
-
-
-void
-OptionsCont::set(const std::string &name, bool value) {
-    Option_Bool *o = dynamic_cast<Option_Bool*>(getOption(name));
-    if(o==0) {
-        throw std::runtime_error("Option '" + name + "' is not a boolean option");
-    }
-    if(value) {
-        o->set("true");
-    } else {
-        o->set("false");
-    }
 }
 
 
@@ -306,8 +297,49 @@ OptionsCont::getSynonyms(const Option* const option) const {
 
 
 
+/* -------------------------------------------------------------------------
+ * (Re-)Setting values
+ * ----------------------------------------------------------------------- */
+void
+OptionsCont::set(const std::string &name, const std::string &value) {
+    Option *o = getOption(name);
+    o->set(value);
+}
 
 
+void
+OptionsCont::set(const std::string &name, bool value) {
+    Option_Bool *o = dynamic_cast<Option_Bool*>(getOption(name));
+    if(o==0) {
+        throw std::runtime_error("Option '" + name + "' is not a boolean option");
+    }
+    if(value) {
+        o->set("true");
+    } else {
+        o->set("false");
+    }
+}
+
+
+void
+OptionsCont::remarkUnset() {
+    for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
+        (*i)->remarkSetable();
+    }
+}
+
+
+void
+OptionsCont::remarkUnset(const std::string &name) {
+    Option *o = getOption(name);
+    o->remarkSetable();
+}
+
+
+
+/* -------------------------------------------------------------------------
+ * Retrieving Help Information
+ * ----------------------------------------------------------------------- */
 const std::string &
 OptionsCont::getSection(const std::string &optionName) const {
     Option *option = getOption(optionName);
@@ -335,18 +367,27 @@ OptionsCont::getHelpTail() const {
 
 
 
-
-
-
-
-void
-OptionsCont::remarkUnset() {
-    for(std::vector<Option*>::iterator i=myOptions.begin(); i!=myOptions.end(); i++) {
-        (*i)->remarkSetable();
-    }
+/* -------------------------------------------------------------------------
+ * Configuration Hierarchy Name Handling
+ * ----------------------------------------------------------------------- */
+void 
+OptionsCont::setParentConfigurationName(const std::string &parentName) {
+    myParentConfigurationName = parentName;
 }
 
 
+const std::string &
+OptionsCont::getParentConfigurationName() {
+    return myParentConfigurationName;
+}
+/// @}
+
+
+
+
+/* -------------------------------------------------------------------------
+ * Configuration Hierarchy Name Handling
+ * ----------------------------------------------------------------------- */
 std::string
 OptionsCont::convert(char abbr) {
     char buf[2];

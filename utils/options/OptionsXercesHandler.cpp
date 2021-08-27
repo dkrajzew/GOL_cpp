@@ -74,7 +74,7 @@ OptionsXercesHandler::startElement(const XMLCh* const uri, const XMLCh* const lo
 
 void
 OptionsXercesHandler::characters(const XMLCh* const chars, const XMLSize_t length) {
-    if(myOptions.contains(myCurrentOptionName) && myOptions.isDefault(myCurrentOptionName)) {
+    if(myOptions.contains(myCurrentOptionName) && myOptions.canBeSet(myCurrentOptionName)) {
         myOptions.set(myCurrentOptionName, convert(chars));
     }
     myCurrentOptionName = "";

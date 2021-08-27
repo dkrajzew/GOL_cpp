@@ -45,25 +45,31 @@ class OptionsCont;
 class OptionsTypedFileIO {
 public:
     /// @brief Constructor
-    OptionsTypedFileIO() {}
+    OptionsTypedFileIO();
 
 
     /// @brief Destructor
-    virtual ~OptionsTypedFileIO() {}
+    virtual ~OptionsTypedFileIO();
 
 
     /** @brief Loads options from a configuration file
+     * 
+     * This method calls the protected member  _loadConfiguration(OptionsCont, String)
+     * within a loop that realises hierarchical configurations.
+     * 
+     * @see _loadConfiguration(OptionsCont, String)
      * @param[in] into The options container to fill
      * @param[in] configurationName The path to the configuration to load
+     * @return Whether options could be loaded
      */
-    virtual bool loadConfiguration(OptionsCont &into, const std::string &configurationName) = 0;
+    virtual bool loadConfiguration(OptionsCont &into, const std::string &configurationName);
 
 
     /** @brief Writes the set options as an XML configuration file
      * @param[in] configName The name of the file to write the configuration to
      * @param[in] options The options container that includes the (set/parsed) options to write 
      */
-    virtual void writeXMLConfiguration(const std::string &configName, const OptionsCont &options) = 0;
+    virtual bool writeXMLConfiguration(const std::string &configName, const OptionsCont &options) = 0;
 
 
     /** @brief Writes the a template for a configuration file
@@ -71,7 +77,16 @@ public:
      * @param options The options container to write a template for 
      * @throws IOException If the file cannot be written
      */
-    virtual void writeXMLTemplate(const std::string &configName, const OptionsCont &options) = 0;
+    virtual bool writeXMLTemplate(const std::string &configName, const OptionsCont &options) = 0;
+
+
+protected:
+    /** @brief Loads options from a configuration file
+     * @param[in] into The options container to fill
+     * @param[in] configurationName The path to the configuration to load
+     * @return Whether options could be loaded
+     */
+    virtual bool _loadConfiguration(OptionsCont &into, const std::string &configurationName) = 0;
 
 
 };

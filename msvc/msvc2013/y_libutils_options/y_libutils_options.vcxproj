@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\..\utils\options\OptionsFileIO_XML.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsIO.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsParser.cpp" />
+    <ClInclude Include="..\..\..\utils\options\OptionsTypedFileIO.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsXercesHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

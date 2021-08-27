@@ -68,7 +68,7 @@ OptionsFileIO_XML::~OptionsFileIO_XML() {
 
 
 bool
-OptionsFileIO_XML::loadConfiguration(OptionsCont &into, const std::string &configurationName) {
+OptionsFileIO_XML::_loadConfiguration(OptionsCont &into, const std::string &configFileName) {
 #ifdef USE_XERCES_XML
     try {
         XMLPlatformUtils::Initialize();
@@ -77,20 +77,19 @@ OptionsFileIO_XML::loadConfiguration(OptionsCont &into, const std::string &confi
         return false;
     }
     SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
-    string file = into.getString(configurationName);
-    OptionsXercesHandler handler(into, file);
+    OptionsXercesHandler handler(into, configFileName);
     parser->setContentHandler(&handler);
     parser->setErrorHandler(&handler);
     try {
-        parser->parse(file.c_str());
+        parser->parse(configFileName.c_str());
     } catch(const XMLException& e) {
-        std::cerr << std::endl << "Error during parsing: '" << file << "'." << std::endl
+        std::cerr << std::endl << "Error during parsing: '" << configFileName << "'." << std::endl
             << "Exception message is:" << std::endl
             << OptionsXercesHandler::convert(e.getMessage()) << std::endl;
         XMLPlatformUtils::Terminate();
         return false;
     } catch(...) {
-        std::cerr << std::endl << "Error: Unexpected exception during parsing: '" << file << "':" << std::endl;
+        std::cerr << std::endl << "Error: Unexpected exception during parsing: '" << configFileName << "':" << std::endl;
         XMLPlatformUtils::Terminate();
         return false;
     }
@@ -103,7 +102,7 @@ OptionsFileIO_XML::loadConfiguration(OptionsCont &into, const std::string &confi
 }
 
 
-void
+bool
 OptionsFileIO_XML::writeXMLConfiguration(const std::string &configName, const OptionsCont &options) {
     std::vector<std::string> optionNames = options.getSortedOptionNames();
     std::ofstream fdo(configName.c_str());
@@ -116,10 +115,11 @@ OptionsFileIO_XML::writeXMLConfiguration(const std::string &configName, const Op
     }
     fdo << "</configuration>" << std::endl;
     fdo.close();
+    return true;
 }
 
 
-void
+bool
 OptionsFileIO_XML::writeXMLTemplate(const std::string &configName, const OptionsCont &options) {
     std::vector<std::string> optionNames = options.getSortedOptionNames();
     std::ofstream fdo(configName.c_str());
@@ -130,6 +130,7 @@ OptionsFileIO_XML::writeXMLTemplate(const std::string &configName, const Options
     }
     fdo << "</configuration>" << std::endl;
     fdo.close();
+    return true;
 }
 
 

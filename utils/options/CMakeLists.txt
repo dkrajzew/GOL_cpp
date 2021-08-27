@@ -14,6 +14,7 @@ set(optionslib_STAT_SRCS
    OptionsLoader.h
    OptionsParser.cpp
    OptionsParser.h
+   OptionsTypedFileIO.cpp
    OptionsTypedFileIO.h
 )
 

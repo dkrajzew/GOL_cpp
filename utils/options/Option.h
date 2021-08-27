@@ -131,7 +131,13 @@ public:
      * @return The value as a string, if set
 	 */
     virtual std::string getValueAsString() const = 0;
-    
+
+
+    /** @brief Returns whether the option can be set
+     * @return Whether the option can be set
+     */
+    bool canBeSet() const;
+
 
 
 protected:

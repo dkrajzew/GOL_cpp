@@ -88,7 +88,12 @@ public:
 	 * @param[in] name2 The synonym to register
 	 */
     void addSynonym(const std::string &name1, const std::string &name2);
+    /// @}
 
+
+
+    /// @brief Filling Help Information
+    /// @{
 
     /** @brief Sets the description for an already added option
      *
@@ -117,7 +122,7 @@ public:
 
 
 
-    /// @brief Retrieving Values
+    /// @brief Retrieving Option Values
     /// @{
 
     /** @brief Returns the integer value of the named option
@@ -163,10 +168,17 @@ public:
 
 
     /** @brief Returns the information whether the option is set
-	 * @param[in] name The name of the option to check
-	 * @return Whether the option has a value set
-	 */
+    * @param[in] name The name of the option to check
+    * @return Whether the option has a value set
+    */
     bool isSet(const std::string &name) const;
+
+
+    /** @brief Returns whether the named option can be set
+     * @param[in] name The name of the option to check whether it can be set
+     * @return Whether the named option can be set
+     */
+    bool canBeSet(const std::string &name) const;
 
 
     /** @brief Returns whether the named option's value is its default value
@@ -212,7 +224,36 @@ public:
 
 
 
-    /// @brief Help Texts Retrieval
+    /// @brief (Re-)Setting values
+    /// @{
+
+    /** @brief Sets the given value to the given option
+    * @param[in] name The name of the option to set
+    * @param[in] value The value to set
+    */
+    void set(const std::string &name, const std::string &value);
+
+
+    /** @brief Sets the given value to the given option (boolean options only)
+    * @param[in] name The name of the option to set
+    * @param[in] value The value to set
+    */
+    void set(const std::string &name, bool value=true);
+
+
+    /// @brief Remarks all options as unset
+    void remarkUnset();
+
+
+    /** @brief Remarks the named option as unset
+     * @param[in] name The name of the option to unset
+     */
+    void remarkUnset(const std::string &name);
+    /// @}
+
+
+
+    /// @brief Retrieving Help Information
     /// @{
 
     /** @brief Returns the name of the section the option belongs to
@@ -256,25 +297,18 @@ public:
 
 
 
-    /// @brief (Re-)Setting values
+    /// @brief Retrieving Help Information
     /// @{
 
-    /** @brief Sets the given value to the given option
-     * @param[in] name The name of the option to set
-	 * @param[in] value The value to set
+    /** @brief Sets the name of the configuration parent option
+     * @param[in] parentName The name to find the parent configuration at
      */
-    void set(const std::string &name, const std::string &value);
+    void setParentConfigurationName(const std::string &parentName);
 
-
-    /** @brief Sets the given value to the given option (boolean options only)
-	 * @param[in] name The name of the option to set
-	 * @param[in] value The value to set
-	 */
-    void set(const std::string &name, bool value=true);
-
-
-    /// @brief Remarks all options as unset
-    void remarkUnset();
+    /** @brief Returns the name of the configuration parent option
+     * @return The name to find the parent configuration at
+     */
+    const std::string &getParentConfigurationName();
     /// @}
 
 
@@ -340,6 +374,9 @@ private:
 
     /// @brief The head and the tail of the help pages
     std::string myHelpHead, myHelpTail;
+
+    /// @brief The name of the option that defines the parent configuration
+    std::string myParentConfigurationName;
 
 
 private:

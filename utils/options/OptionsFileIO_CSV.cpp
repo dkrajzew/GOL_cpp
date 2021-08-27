@@ -54,12 +54,11 @@ OptionsFileIO_CSV::~OptionsFileIO_CSV() {
 
 
 bool
-OptionsFileIO_CSV::loadConfiguration(OptionsCont &into, const std::string &configurationName) {
+OptionsFileIO_CSV::_loadConfiguration(OptionsCont &into, const std::string &configFileName) {
     std::string line;
-    std::string file = into.getString(configurationName);
-    std::ifstream fdi(file.c_str());
+    std::ifstream fdi(configFileName.c_str());
     if(!fdi.good()) {
-        std::cerr << std::endl << "Error: Could not open configuration file '" << file << "' for reading." << std::endl;
+        std::cerr << std::endl << "Error: Could not open configuration file '" << configFileName << "' for reading." << std::endl;
         return false;
     }
     while (getline(fdi, line, '\n')) {
@@ -81,18 +80,21 @@ OptionsFileIO_CSV::loadConfiguration(OptionsCont &into, const std::string &confi
         if(i1==std::string::npos) {
             continue;
         }
-        size_t i2 = line.find(";", i1+1);
-        if(i2==std::string::npos) {
-            into.set(line.substr(0, i1), line.substr(i1+1));
-        } else {
-            into.set(line.substr(0, i1), line.substr(i1+1, i2-i1-1));
+        std::string name = line.substr(0, i1);
+        if(name!="" && into.canBeSet(name)) {
+            size_t i2 = line.find(";", i1+1);
+            if(i2==std::string::npos) {
+                into.set(name, line.substr(i1+1));
+            } else {
+                into.set(name, line.substr(i1+1, i2-i1-1));
+            }
         }
     }
     return true;
 }
 
 
-void
+bool
 OptionsFileIO_CSV::writeXMLConfiguration(const std::string &configName, const OptionsCont &options) {
     std::vector<std::string> optionNames = options.getSortedOptionNames();
     std::ofstream fdo(configName.c_str());
@@ -103,10 +105,11 @@ OptionsFileIO_CSV::writeXMLConfiguration(const std::string &configName, const Op
         }
     }
     fdo.close();
+    return true;
 }
 
 
-void
+bool
 OptionsFileIO_CSV::writeXMLTemplate(const std::string &configName, const OptionsCont &options) {
     std::vector<std::string> optionNames = options.getSortedOptionNames();
     std::ofstream fdo(configName.c_str());
@@ -115,6 +118,7 @@ OptionsFileIO_CSV::writeXMLTemplate(const std::string &configName, const Options
         fdo << optionName << ";" << std::endl;
     }
     fdo.close();
+    return true;
 }
 
 
