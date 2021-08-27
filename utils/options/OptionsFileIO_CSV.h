@@ -71,10 +71,10 @@ public:
 
 protected:
     /** @brief Loads options from a configuration file
-    * @param[in] into The options container to fill
-    * @param[in] configurationName The path to the configuration to load
-    * @return Whether options could be loaded
-    */
+     * @param[in] into The options container to fill
+     * @param[in] configurationName The path to the configuration to load
+     * @return Whether options could be loaded
+     */
     bool _loadConfiguration(OptionsCont &into, const std::string &configurationName);
 
 };

@@ -58,7 +58,7 @@ public:
 	 * @param[in] argc The number of arguments given on the command line
 	 * @param[in] argv The arguments given on the command line
      * @param[in] fileIO The file reading handler to use
-     * @param[in] configOptionName The path to the configuration to load
+     * @param[in] configOptionName The name of the option to get the path to the configuration to load from
      * @param[in] continueOnError Continues even if an error occures while parsing
   	 * @param[in] acceptUnknown Unknown options do not throw an exception
      * @return Whether parsing and loading was successful
@@ -101,9 +101,10 @@ private:
      *
      * The synomymes are sorted by length.
      * @param[in] option The option to get the synonyms help string for
+     * @param[in] configOptionName The name of the option to get the path to the configuration to load from
      * @return The options as a help-formatted string
      */
-    static std::string getHelpFormattedSynonyms(const OptionsCont &options, const std::string &optionName);
+    static std::string getHelpFormattedSynonyms(const OptionsCont &options, const std::string &configOptionName);
 
 
 };

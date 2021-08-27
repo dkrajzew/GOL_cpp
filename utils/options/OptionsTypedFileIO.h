@@ -59,10 +59,10 @@ public:
      * 
      * @see _loadConfiguration(OptionsCont, String)
      * @param[in] into The options container to fill
-     * @param[in] configurationName The path to the configuration to load
+     * @param[in] configOptionName The name of the option to get the path to the configuration to load from
      * @return Whether options could be loaded
      */
-    virtual bool loadConfiguration(OptionsCont &into, const std::string &configurationName);
+    virtual bool loadConfiguration(OptionsCont &into, const std::string &configOptionName);
 
 
     /** @brief Writes the set options as an XML configuration file
