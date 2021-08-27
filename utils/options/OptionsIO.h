@@ -37,6 +37,7 @@
  * class declarations
  * ======================================================================= */
 class OptionsCont;
+class OptionsTypedFileIO;
 
 
 
@@ -56,31 +57,17 @@ public:
 	 * @param[in] into The options container to fill
 	 * @param[in] argc The number of arguments given on the command line
 	 * @param[in] argv The arguments given on the command line
-  	 * @param[in] configOptionName The path to the configuration to load (XML)
-	 * @param[in] continueOnError Continues even if an error occures while parsing
+     * @param[in] fileIO The file reading handler to use
+     * @param[in] configOptionName The path to the configuration to load
+     * @param[in] continueOnError Continues even if an error occures while parsing
   	 * @param[in] acceptUnknown Unknown options do not throw an exception
      * @return Whether parsing and loading was successful
      * @todo continueOnError is not used
      * @todo acceptUnknown is not used
      */
     static bool parseAndLoad(OptionsCont &into, int argc, char **argv,
-		const std::string &configOptionName, bool continueOnError=false,
-		bool acceptUnknown=false);
-
-
-    /** @brief Writes the set options as an XML configuration file
-     * @param[in] configName The name of the file to write the configuration to
-     * @param[in] options The options container that includes the (set/parsed) options to write 
-     */
-    static void writeXMLConfiguration(const std::string &configName, const OptionsCont &options);
-
-
-    /** @brief Writes the a template for a configuration file
-     * @param configName The name of the file to write the template to
-     * @param options The options container to write a template for 
-     * @throws IOException If the file cannot be written
-     */
-    static void writeXMLTemplate(const std::string &configName, const OptionsCont &options);
+        OptionsTypedFileIO &fileIO, const std::string &configOptionName, 
+        bool continueOnError=false, bool acceptUnknown=false);
 
 
     /** @brief Output operator
@@ -109,14 +96,6 @@ public:
 
 
 private:
-    /** @brief Loads options from an XML configuration file
-	 * @param[in] into The options container to fill
-	 * @param[in] configurationName The path to the configuration to load (XML)
-	 */
-    static bool load(OptionsCont &into, const std::string &configurationName);
-
-
-
     /** @brief Returns the synomymes of an option as a help-formatted string 
      *
      * The synomymes are sorted by length.

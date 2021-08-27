@@ -94,13 +94,18 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\utils\options\Option.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsCont.h" />
+    <ClInclude Include="..\..\..\utils\options\OptionsFileIO_CSV.h" />
+    <ClInclude Include="..\..\..\utils\options\OptionsFileIO_XML.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsIO.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsParser.h" />
+    <ClInclude Include="..\..\..\utils\options\OptionsTypedFileIO.h" />
     <ClInclude Include="..\..\..\utils\options\OptionsXercesHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\utils\options\Option.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsCont.cpp" />
+    <ClCompile Include="..\..\..\utils\options\OptionsFileIO_CSV.cpp" />
+    <ClCompile Include="..\..\..\utils\options\OptionsFileIO_XML.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsIO.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsParser.cpp" />
     <ClCompile Include="..\..\..\utils\options\OptionsXercesHandler.cpp" />

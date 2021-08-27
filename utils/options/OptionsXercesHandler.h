@@ -28,6 +28,7 @@
 /* =========================================================================
  * included modules
  * ======================================================================= */
+#include <string>
 #include <sax2/Attributes.hpp>
 #include <sax2/DefaultHandler.hpp>
 

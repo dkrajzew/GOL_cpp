@@ -1,15 +1,15 @@
  Words
-  -n, --name    Defines how to call the user.
-  -g, --greet   Defines how to greet.
-  -c, --config  Loads the named configuration.
+  -n, --name       Defines how to call the user.
+  -g, --greet      Defines how to greet.
+  -c, --xmlconfig  Loads the named configuration.
  Processing
-  -r, --repeat  Sets an optional number of repetitions.
+  -r, --repeat     Sets an optional number of repetitions.
  Meta
-  --version     Prints the version.
-  -?, --help    Prints this help screen.
+  --version        Prints the version.
+  -?, --help       Prints this help screen.
 -------------------------------------------------------------------------------
 ? (help): false (default)
-c (config): config.xml
+c (xmlconfig): config.xml
 g (greet): Hei
 n (name): Du
 version: false (default)

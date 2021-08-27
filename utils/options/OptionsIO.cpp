@@ -23,19 +23,12 @@
 #include "OptionsCont.h"
 #include "OptionsIO.h"
 #include "OptionsParser.h"
+#include "OptionsTypedFileIO.h"
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
-
-#ifdef USE_XERCES_XML
-#include "OptionsXercesHandler.h"
-#include <util/PlatformUtils.hpp>
-#include <sax2/SAX2XMLReader.hpp>
-#include <sax2/XMLReaderFactory.hpp>
-using namespace XERCES_CPP_NAMESPACE;
-#endif // USE_XERCES_XML
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -58,88 +51,15 @@ using namespace std;
  * ======================================================================= */
 bool
 OptionsIO::parseAndLoad(OptionsCont &into, int argc, char **argv,
-                        const std::string &configOptionName,
+                        OptionsTypedFileIO &fileIO, const std::string &configOptionName, 
                         bool , bool ) {
     bool ok = OptionsParser::parse(into, argc, argv);
-    if(ok) into.remarkUnset();
-    if(ok) ok = load(into, configOptionName);
-    if(ok) into.remarkUnset();
-    if(ok) ok = OptionsParser::parse(into, argc, argv);
+    if(ok && configOptionName.length()!=0 && into.isSet(configOptionName)) {
+        ok = fileIO.loadConfiguration(into, configOptionName);
+    }
     return ok;
 }
 
-
-bool
-OptionsIO::load(OptionsCont &into, const std::string &configOptionName) {
-    if(configOptionName.length()==0) {
-        return true;
-    }
-    if(!into.isSet(configOptionName)) {
-        return true;
-    }
-#ifdef USE_XERCES_XML
-    try {
-        XMLPlatformUtils::Initialize();
-    } catch(const XMLException& toCatch) {
-        cerr << "Error during initialization! Message:" << std::endl
-             << OptionsXercesHandler::convert(toCatch.getMessage()) << endl;
-        return false;
-    }
-    SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
-    string file = into.getString(configOptionName);
-    OptionsXercesHandler handler(into, file);
-    parser->setContentHandler(&handler);
-    parser->setErrorHandler(&handler);
-    try {
-        parser->parse(file.c_str());
-    } catch(const XMLException& e) {
-        std::cerr << std::endl << "Error during parsing: '" << file << std::endl
-             << "Exception message is:" << std::endl
-             << OptionsXercesHandler::convert(e.getMessage()) << "\n" << std::endl;
-        XMLPlatformUtils::Terminate();
-        return false;
-    } catch(...) {
-        std::cerr << std::endl << "Error: Unexpected exception during parsing: '" << file << std::endl;
-        XMLPlatformUtils::Terminate();
-        return false;
-    }
-    return !handler.errorOccured();
-#else
-    // consume "into"
-    into.contains("foo");
-    return true;
-#endif // USE_XERCES_XML
-}
-
-
-void 
-OptionsIO::writeXMLConfiguration(const std::string &configName, const OptionsCont &options) {
-    std::vector<std::string> optionNames = options.getSortedOptionNames();
-    std::ofstream fdo(configName.c_str());
-    fdo << "<configuration>" << std::endl;
-    for(std::vector<std::string>::const_iterator i=optionNames.begin(); i!=optionNames.end(); ++i) {
-        std::string optionName = *i;
-        if(options.isSet(optionName) && !options.isDefault(optionName)) {
-            fdo << "   <" << optionName << ">" << options.getValueAsString(optionName) << "</" << optionName << std::endl;
-        }
-    }
-    fdo << "</configuration>" << std::endl;
-    fdo.close();
-}
-
-
-void 
-OptionsIO::writeXMLTemplate(const std::string &configName, const OptionsCont &options) {
-    std::vector<std::string> optionNames = options.getSortedOptionNames();
-    std::ofstream fdo(configName.c_str());
-    fdo << "<configuration>" << std::endl;
-    for(std::vector<std::string>::const_iterator i=optionNames.begin(); i!=optionNames.end(); ++i) {
-        std::string optionName = *i;
-        fdo << "   <" << optionName << "></" << optionName << std::endl;
-    }
-    fdo << "</configuration>" << std::endl;
-    fdo.close();
-}
 
 
 void 

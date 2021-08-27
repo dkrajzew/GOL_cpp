@@ -49,6 +49,8 @@
 #include <utils/options/OptionsCont.h>
 #include <utils/options/Option.h>
 #include <utils/options/OptionsIO.h>
+#include <utils/options/OptionsFileIO_CSV.h>
+#include <utils/options/OptionsFileIO_XML.h>
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -79,6 +81,7 @@ using namespace std;
  * ======================================================================= */
 OptionsCont myOptions;
 std::string configOptionName;
+OptionsTypedFileIO *fileIO = 0;
 
 
 
@@ -137,6 +140,14 @@ loadDefinition() {
             }
             if(type=="CONFIG") {
                 configOptionName = synonyms[0];
+                if(configOptionName.find("xml")!=std::string::npos) {
+                    fileIO = new OptionsFileIO_XML();
+                } else if(configOptionName.find("csv")!=std::string::npos) {
+                    fileIO = new OptionsFileIO_CSV();
+                } else {
+                    throw std::runtime_error("Unknown configuration format");
+                }
+
                 continue;
             }
             // ... is it a named section begin?
@@ -208,7 +219,7 @@ main(int argc, char *argv[]) {
     // parse options
     if(ret==STAT_OK) {
         try {
-            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, configOptionName)) {
+            if(!OptionsIO::parseAndLoad(myOptions, argc, argv, *fileIO, configOptionName)) {
                 ret = STAT_READ_COMMENT;
             }
             OptionsIO::printHelp(std::cout, myOptions);
@@ -224,6 +235,7 @@ main(int argc, char *argv[]) {
             ret = STAT_READ_COMMENT;
         }
     }
+    delete fileIO;
     if(ret!=STAT_OK) {
         cerr << "Quitting (on error)." << endl;
     }

@@ -29,6 +29,9 @@
  * ======================================================================= */
 #include <sax2/Attributes.hpp>
 #include <sax2/DefaultHandler.hpp>
+#include <util/PlatformUtils.hpp>
+#include <sax2/SAX2XMLReader.hpp>
+#include <sax2/XMLReaderFactory.hpp>
 #include <iostream>
 #include <string>
 #include "OptionsXercesHandler.h"
@@ -71,7 +74,7 @@ OptionsXercesHandler::startElement(const XMLCh* const uri, const XMLCh* const lo
 
 void
 OptionsXercesHandler::characters(const XMLCh* const chars, const XMLSize_t length) {
-    if(myOptions.contains(myCurrentOptionName)) {
+    if(myOptions.contains(myCurrentOptionName) && myOptions.isDefault(myCurrentOptionName)) {
         myOptions.set(myCurrentOptionName, convert(chars));
     }
     myCurrentOptionName = "";
@@ -112,6 +115,8 @@ OptionsXercesHandler::convert(const XMLCh * const str) {
     }
     return ret;
 }
+
+
 
 #endif // USE_XERCES_XML
 

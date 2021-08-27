@@ -38,6 +38,7 @@
 #include <utils/options/OptionsCont.h>
 #include <utils/options/Option.h>
 #include <utils/options/OptionsIO.h>
+#include <utils/options/OptionsFileIO_CSV.h>
 
 /* -------------------------------------------------------------------------
  * (optional) memory checking
@@ -91,7 +92,7 @@ getOptions(int argc, char *argv[]) {
     myOptions.add("help", '?', new Option_Bool());
     myOptions.setDescription("help", "Prints this help screen.");
     // parse
-    return OptionsIO::parseAndLoad(myOptions, argc, argv, "");
+    return OptionsIO::parseAndLoad(myOptions, argc, argv, OptionsFileIO_CSV(), "");
 }
 
 

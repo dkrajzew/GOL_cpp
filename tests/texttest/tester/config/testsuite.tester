@@ -1,6 +1,11 @@
+# plain call with no configuration
 plain
-from_characters
-missing_file
+
+# dealing with xml configs
+xml
+
+# dealing with csv configs
+csv
 
 
 
