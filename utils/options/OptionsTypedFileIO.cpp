@@ -63,10 +63,9 @@ OptionsTypedFileIO::loadConfiguration(OptionsCont &into, const std::string &conf
             into.remarkUnset(parentName);
         }
         ok &= _loadConfiguration(into, fileName);
+        fileName = "";
         if(parentName!="" && !into.isDefault(parentName)) {
             fileName = into.getString(parentName);
-        } else {
-            fileName = "";
         }
     } while (ok && fileName!="");
     return ok;
